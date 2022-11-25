@@ -26,7 +26,7 @@ export class AuthController {
         return this.authService.login(userInDb, {
             algorithm: "RS256",
             privateKey: await this.jwtKeyService.getPrivKey(),
-
+            expiresIn: "10d"
         });
     }
 
