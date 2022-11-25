@@ -36,7 +36,7 @@ export class AuthController {
     async create (@Body() createUser: UserDTO) {
         
         const newUser = await this.userService.create(createUser);
-        const { password, ...others } = newUser;
+        const { password, ...others } = newUser.toJSON();
         return others;
     }
 }
