@@ -13,6 +13,7 @@ import { JwtKeyService } from './jwt-keys';
 import { JwtKeyModule } from './jwt-key.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/user.schema';
+import { RoleGuard } from './guard/role.guard';
 
 
 @Module({
@@ -30,7 +31,7 @@ import { User, UserSchema } from '../user/user.schema';
       
       inject: [ConfigService, JwtKeyService]
   })],
-  providers: [AuthService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService],
+  providers: [AuthService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService, RoleGuard],
   exports: [AuthService, JwtStrategy, LocalStrategy, JwtModule, PassportModule],
   controllers: [AuthController]
 })

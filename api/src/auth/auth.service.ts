@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Types, Document } from 'mongoose';
 import { HashService } from 'src/user/password-hash.service';
-import { User } from 'src/user/user.schema';
+import { User, UserDocument } from 'src/user/user.schema';
 import { UserService } from 'src/user/user.service';
 
 export type UserEntity = User & Document<any, any, any> & {
@@ -36,7 +36,7 @@ export class AuthService {
       return user;
     }
 
-    async login(user: any, signOptions: JwtSignOptions = {}) {
+    async login(user: UserDocument, signOptions: JwtSignOptions = {}) {
       console.log(user);
       const payload = {
         username: user.username,

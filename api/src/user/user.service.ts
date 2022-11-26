@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Payload } from 'src/auth/auth.service';
 import { HashService } from './password-hash.service';
 import { UserDTO } from './user.dto';
@@ -56,5 +56,12 @@ export class UserService {
 
     async getByPayload ({ sub }: Payload): Promise<UserDTO> {
         return await this.model.findById(sub);
+    }
+
+    async updateUser (id: ObjectId, values: Partial<UserDTO>) {
+        const updatedUser = await this.model.findByIdAndUpdate(id, {
+           $set:  values
+        });
+        return updatedUser;
     }
 }
