@@ -3,13 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Payload } from 'src/auth/auth.service';
 import { HashService } from './password-hash.service';
-import { UserDTO } from './user.dto';
+import { UserDTO, UserWithoutPassword } from './user.dto';
 import { User, UserDocument } from './user.schema';
 import { MongooseError } from "mongoose";
 
 @Injectable()
 export class UserService {
-
+    
     constructor(@InjectModel(User.name) private readonly model: Model<UserDocument>, private hashService: HashService) {
 
     }
@@ -40,6 +40,11 @@ export class UserService {
     }
     }
 
+    async getAll(limit?: number) {
+        return !limit ? await this.model.find() : await this.model.find().sort({ _id: -1}).limit(limit);
+    }
+
+
     async getUserByUsername(username: string) {
         return this.model.findOne({
             username
@@ -54,8 +59,17 @@ export class UserService {
         .exec();
     }
 
+    async getUserById(id: ObjectId | string) {
+        return this.model.findById(id)
+            .exec();
+    }
+
     async getByPayload ({ sub }: Payload): Promise<UserDTO> {
         return await this.model.findById(sub);
+    }
+
+    async getUserStats () {
+         
     }
 
     async updateUser (id: ObjectId, values: Partial<UserDTO>) {
@@ -63,5 +77,41 @@ export class UserService {
            $set:  values
         });
         return updatedUser;
+    }
+
+    async deleteUser (id: ObjectId | string) {
+        return await this.model.findByIdAndDelete(id);
+    }
+
+    mapUserToDTO (user: User, userDTO: UserDTO): UserDTO {
+        userDTO.username = user.username;
+        userDTO.email = user.email;
+        userDTO.password = user.password;
+        userDTO.createdAt = user.createdAt;
+        userDTO.updatedAt = user.updatedAt;
+        userDTO.role = user.role;
+
+        return userDTO;
+    }
+
+    mapDTOToUser(userDTO: UserDTO, user: User) {
+        user.username = userDTO.username;
+        user.email = userDTO.email;
+        user.password = userDTO.password;
+        user.createdAt = userDTO.createdAt;
+        user.updatedAt = userDTO.updatedAt;
+        user.role = userDTO.role;
+
+        return user;
+    }
+
+    mapUserToDTOWithoutPassword (user: User, userDTOWithoutPassword: UserWithoutPassword): UserWithoutPassword {
+        userDTOWithoutPassword.username = user.username;
+        userDTOWithoutPassword.email = user.email;
+        userDTOWithoutPassword.password = user.password;
+        userDTOWithoutPassword.createdAt = user.createdAt;
+        userDTOWithoutPassword.updatedAt = user.updatedAt;
+
+        return userDTOWithoutPassword;
     }
 }

@@ -1,15 +1,16 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Param, Post, Put, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, HttpCode, HttpStatus, InternalServerErrorException, Param, Post, Put, Query, Req, UnauthorizedException, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
 import { Role } from '../auth/decorator/role.decorator';
 import { RoleGuard } from '../auth/guard/role.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { Role as UserRole } from './user-role';
-import { UserDTO } from './user.dto';
+import { UserDTO, UserWithoutPassword } from './user.dto';
 import { UserService } from './user.service';
 import { User, UserDocument } from './user.schema';
 import { HashService } from './password-hash.service';
 import { ObjectId } from 'mongoose';
+import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 
 @Controller('user')
 export class UserController {
@@ -28,21 +29,59 @@ export class UserController {
         return others;
     }
 
+    @UseInterceptors(ClassSerializerInterceptor)
     @Put('/:id')
+    @UseGuards(VerifyUserIdGuard)
     async updateUser (@Param("id") id: string, @Req() req: Request, @Body() userDTO: Partial<UserDTO> ) {
         console.log(req.user, id);
-        if (((req.user as UserDocument)._id as ObjectId).toString() === id || (req.user as UserDocument).role === UserRole.ADMIN) {
-            if (userDTO.password) {
-                userDTO.password = await this.hashService.hashPassword(userDTO.password);
+
+        if (userDTO.role) throw new BadRequestException("Cannot edit user role!");
+        
+        if (userDTO.password) {
+            userDTO.password = await this.hashService.hashPassword(userDTO.password);
+        }
+        try {
+            const updatedUser = await this.service.updateUser((req.user as UserDocument)._id, userDTO);
+            const userDTOWithoutPassword = this.service.mapUserToDTOWithoutPassword(updatedUser, new UserWithoutPassword());
+            return userDTOWithoutPassword;
+        } catch (err) {
+            throw new InternalServerErrorException();
+            
+        }
+    }
+
+    @Delete("/:id")
+    @UseGuards(VerifyUserIdGuard)
+    async deleteUser (@Param("id") id: string ): Promise<{ message: string; }> {
+        try {
+            await this.service.deleteUser(id);
+            return {
+                message: "User successfully deleted!"
             }
-            try {
-                const updatedUser = await this.service.updateUser((req.user as UserDocument)._id, userDTO);
-                return updatedUser;
-            } catch (err) {
-                throw new InternalServerErrorException();
-                
-            }
-        } else throw new UnauthorizedException("Hmmmm!");
+        } catch (error) {
+            throw new InternalServerErrorException();
+        }
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get('/:id')
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
+    async getUserById (@Param('id') id: string) {
+        const user = await this.service.getUserById(id);
+
+        const userDTOWithoutPassword = this.service.mapUserToDTOWithoutPassword(user, new UserWithoutPassword());
+        return userDTOWithoutPassword;
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get('/')
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
+    @HttpCode(HttpStatus.OK)
+    async getAllUsers (@Query("size") size: number) {
+        const users = await this.service.getAll(size);
+        return users;
     }
 
 }

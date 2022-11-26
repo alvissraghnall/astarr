@@ -14,6 +14,7 @@ import { JwtKeyModule } from './jwt-key.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/user.schema';
 import { RoleGuard } from './guard/role.guard';
+import { VerifyUserIdGuard } from './guard/verify-user-id.guard';
 
 
 @Module({
@@ -31,8 +32,8 @@ import { RoleGuard } from './guard/role.guard';
       
       inject: [ConfigService, JwtKeyService]
   })],
-  providers: [AuthService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService, RoleGuard],
-  exports: [AuthService, JwtStrategy, LocalStrategy, JwtModule, PassportModule],
+  providers: [AuthService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService, RoleGuard, VerifyUserIdGuard],
+  exports: [AuthService, JwtStrategy, LocalStrategy, JwtModule, PassportModule, VerifyUserIdGuard],
   controllers: [AuthController]
 })
 export class AuthModule {}
