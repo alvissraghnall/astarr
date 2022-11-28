@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, HttpCode, HttpException, HttpStatus, Post, Request } from '@nestjs/common';
-import { UserDTO } from '../user/user.dto';
+import { UserDTO, UserWithoutPassword } from '../user/user.dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { JwtKeyService } from './jwt-keys';
@@ -36,7 +36,8 @@ export class AuthController {
     async create (@Body() createUser: UserDTO) {
         
         const newUser = await this.userService.create(createUser);
-        const { password, ...others } = newUser.toJSON();
-        return others;
+        const userTransport = this.userService.mapUserToDTOWithoutPassword(newUser, new UserWithoutPassword());
+        // const { password, ...others } = newUser.toJSON();
+        return userTransport;
     }
 }

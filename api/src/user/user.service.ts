@@ -68,8 +68,21 @@ export class UserService {
         return await this.model.findById(sub);
     }
 
-    async getUserStats () {
-         
+    async getUserStats (lastYear: Date) {
+        return await this.model.aggregate([
+            { $match: { createdAt: { $gte: lastYear } } },
+            {
+                $project: {
+                    month: { $month: "$createdAt" }
+                },
+            },
+            {
+                $group: {
+                    _id: "$month",
+                    total: { $sum: 1 }
+                }
+            }
+        ])
     }
 
     async updateUser (id: ObjectId, values: Partial<UserDTO>) {

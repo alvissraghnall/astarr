@@ -3,7 +3,9 @@ import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
-@Schema()
+@Schema({
+    timestamps: true
+})
 export class Product {
 
     @Prop({
@@ -30,11 +32,11 @@ export class Product {
     @Prop({ required: true })
     price: number;
 
-    @Prop({ required: true, default: new Date() })
+    @Prop({ required: true })
     createdAt: Date;
 
     @Prop()
-    updatedAt?: Date;
+    updatedAt: Date;
 
 }
 
