@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { ProductSize } from './product-size';
 
 export type ProductDocument = Product & Document;
 
@@ -23,8 +24,8 @@ export class Product {
     @Prop()
     categories: string[];
 
-    @Prop({ required: true })
-    size: string;
+    @Prop({ type: String, enum: ProductSize, default: ProductSize.MEDIUM })
+    size: ProductSize;
 
     @Prop({ required: true })
     color: string;
@@ -32,10 +33,8 @@ export class Product {
     @Prop({ required: true })
     price: number;
 
-    @Prop({ required: true })
     createdAt: Date;
 
-    @Prop()
     updatedAt: Date;
 
 }

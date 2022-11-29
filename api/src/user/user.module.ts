@@ -13,10 +13,11 @@ import { JwtKeyService } from 'src/auth/jwt-keys';
 import { PassportModule } from '@nestjs/passport';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserStatsController } from './user-stats.controller';
 
 @Module({
   providers: [UserService, HashService, AuthService, JwtStrategy, LocalStrategy, ConfigService, RoleGuard, JwtKeyService],
-  controllers: [UserController],
+  controllers: [UserController, UserStatsController],
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     AuthModule,

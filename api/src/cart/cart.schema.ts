@@ -5,7 +5,9 @@ import { CartObject } from './cart-object.schema';
 
 export type CartDocument = Cart & Document;
 
-@Schema()
+@Schema({
+    timestamps: true
+})
 export class Cart {
 
     @Prop({
@@ -16,13 +18,11 @@ export class Cart {
     })
     userId: User;
     
-    @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartObject" }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartObject" }] })
     products: CartObject[]
 
-    @Prop({ required: true, default: new Date() })
     createdAt: Date;
 
-    @Prop()
     updatedAt?: Date;
 
 }

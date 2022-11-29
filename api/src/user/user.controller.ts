@@ -84,14 +84,4 @@ export class UserController {
         return users;
     }
 
-    @Get("stats")
-    @UseGuards(RoleGuard)
-    @Role(UserRole.ADMIN)
-    @HttpCode(HttpStatus.OK)
-    async getUserStats () {
-        const date = new Date();
-        const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-        
-        return this.service.getUserStats(lastYear);
-    }
 }

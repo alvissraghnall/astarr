@@ -1,10 +1,9 @@
 import { IsNotEmpty, IsAlpha } from "class-validator";
-
+import { Expose } from "class-transformer";
 
 export class ProductDTO {
 
     @IsNotEmpty()
-    @IsAlpha()
     title: string;
 
     @IsNotEmpty()
@@ -13,6 +12,7 @@ export class ProductDTO {
     @IsNotEmpty()
     image: string;
 
+    @Expose()
     categories: string[];
 
     @IsNotEmpty()
@@ -23,10 +23,8 @@ export class ProductDTO {
     
     @IsNotEmpty()
     price: number;
-
     
     createdAt: Date;
-
     
     updatedAt: Date;
 }

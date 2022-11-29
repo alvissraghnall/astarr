@@ -5,7 +5,9 @@ import { Status } from './order-status';
 
 export type OrderDocument = Order & Document;
 
-@Schema()
+@Schema({
+    timestamps: true
+})
 export class Order {
 
     @Prop({
@@ -25,10 +27,8 @@ export class Order {
     @Prop({ required: true, default: Status.PENDING })
     status: Status;
 
-    @Prop({ required: true, default: new Date() })
     createdAt: Date;
 
-    @Prop()
     updatedAt?: Date;
 
 }

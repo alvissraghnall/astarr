@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
         private readonly jwtKeyService: JwtKeyService,
         private readonly authService: AuthService
         ) {
-        console.log(fs.readFileSync(path.join(process.cwd(), "./jwtRS256.key")).toString())
+        // console.log(fs.readFileSync(path.join(process.cwd(), "./jwtRS256.key")).toString())
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,

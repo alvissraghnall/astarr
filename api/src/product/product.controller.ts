@@ -1,4 +1,4 @@
-import { Controller, Post, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param  } from '@nestjs/common';
+import { Controller, Post, NotFoundException, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param, BadRequestException  } from '@nestjs/common';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { Role } from '../auth/decorator/role.decorator';
@@ -19,14 +19,22 @@ export class ProductController {
     @Role(UserRole.ADMIN)
     @HttpCode(HttpStatus.CREATED)
     async createProduct (@Body() productDTO: ProductDTO) {
-        return await this.productService.createProduct(productDTO);
+        return await this.productService.createProduct(productDTO)
+            .catch(err => {
+                if (err.code == 11000) {
+                    throw new BadRequestException(`Product with title ${productDTO.title} already exists!`);
+                }
+            });
     }
 
     @Get(":id")
     @Public()
     @HttpCode(HttpStatus.OK)
     async getProduct (@Param("id") id: string) {
-        return await this.productService.getProduct(id);
+        const prod = await this.productService.getProduct(id);
+        if (!prod.createdAt) throw new NotFoundException();
+
+        return prod;
     }
 
 
