@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
+import { User } from 'src/user/user.schema';
 import { CartObject } from '../cart/cart-object.schema';
 import { Status } from './order-status';
 
@@ -18,11 +19,18 @@ export class Order {
     })
     cartId: Types.ObjectId;
 
+    @Prop({
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    })
+    userId: User | Types.ObjectId;
+
     @Prop({ required: true })
     amount: number;
     
     @Prop({ required: true })
-    address: Object;
+    address: string;
 
     @Prop({ required: true, default: Status.PENDING })
     status: Status;

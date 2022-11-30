@@ -45,7 +45,7 @@ export class UserController {
             const userDTOWithoutPassword = this.service.mapUserToDTOWithoutPassword(updatedUser, new UserWithoutPassword());
             return userDTOWithoutPassword;
         } catch (err) {
-            throw new InternalServerErrorException();
+            throw new BadRequestException();
             
         }
     }
@@ -59,7 +59,7 @@ export class UserController {
                 message: "User successfully deleted!"
             }
         } catch (error) {
-            throw new InternalServerErrorException();
+            throw new BadRequestException();
         }
     }
 

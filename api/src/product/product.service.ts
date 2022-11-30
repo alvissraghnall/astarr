@@ -23,11 +23,11 @@ export class ProductService {
     }
 
     async getProducts(sortOptions: ProductSortOptions): Promise<ProductDTO[]> {
-        const products = sortOptions.new ? await this.productModel.find().sort({ createdAt: -1 }).limit(1)
-            : sortOptions.cat ? (await this.productModel.find({
-                categories: { $in: [sortOptions.cat] }
-            }))
-            : await this.productModel.find();
+        const products = sortOptions.cat ? await this.productModel.find({
+            categories: { $in: [sortOptions.cat] }
+        })
+            : (sortOptions.new ? await this.productModel.find().sort({ createdAt: -1 }).limit(1)
+            : await this.productModel.find());
         
         let inDTO: ProductDTO[] = [];
         if (products) {

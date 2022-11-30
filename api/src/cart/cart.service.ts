@@ -18,12 +18,31 @@ export class CartService {
         return this.mapCartToDTO(saved, new CartDTO());
     }
 
-    async get (id: ObjectId | string): Promise<CartDTO> {
-        return this.mapCartToDTO(await this.cartModel.findById(id), new CartDTO());
+    async get (userId: ObjectId | string): Promise<CartDTO> {
+        return this.mapCartToDTO(await this.cartModel.findOne({ userId }), new CartDTO());
+    }
+
+    async getAll (): Promise<CartDTO[]> {
+        const carts = await this.cartModel.find();
+        let inDTO: CartDTO[] = [];
+        if (carts) {
+            for (const cart of carts) {
+                inDTO.push(this.mapCartToDTO(cart, new CartDTO()))
+            }
+        }
+        return inDTO;
     }
 
     async remove (id: ObjectId | string): Promise<CartDTO> {
         return this.mapCartToDTO(await this.cartModel.findByIdAndDelete(id), new CartDTO());
+    }
+
+    async update (id: ObjectId | string, values: Partial<CartDTO>): Promise<CartDTO> {
+        const updatedCart = await this.cartModel.findByIdAndUpdate(id, {
+            $set:  values
+         }, { new: true, lean: true });
+         return this.mapCartToDTO(updatedCart, new CartDTO());
+         
     }
 
     private mapCartToDTO (cart: Cart, dto: CartDTO): CartDTO {

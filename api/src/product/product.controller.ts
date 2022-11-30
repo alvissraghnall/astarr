@@ -58,7 +58,7 @@ export class ProductController {
     async deleteProduct (@Param("id") id: string ): Promise<{ message: string; }> {
         await this.productService.deleteProduct(id);
         return {
-            message: "Product successfully updated!"
+            message: "Product successfully deleted!"
         }
     }
 
