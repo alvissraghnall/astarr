@@ -9,6 +9,7 @@ import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PassportModule } from '@nestjs/passport';
     OrderModule,
     AuthModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
