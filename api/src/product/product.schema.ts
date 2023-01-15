@@ -22,7 +22,7 @@ export class Product {
     image: string;
 
     @Prop()
-    categories: string[];
+    category: string;
 
     @Prop({ type: Array, default: [ProductSize.MEDIUM] })
     size: ProductSize[];

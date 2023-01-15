@@ -17,7 +17,7 @@ export class ProductDTO {
     image: string;
 
     @Expose()
-    categories: string[];
+    category: string;
 
     size: ProductSize[];
 

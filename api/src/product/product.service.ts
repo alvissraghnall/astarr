@@ -51,7 +51,7 @@ export class ProductService {
     }
 
     private mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
-        dto.categories = product?.categories;
+        dto.category = product?.category;
         dto.createdAt = product?.createdAt;
         dto.updatedAt = product?.updatedAt;
         dto.image = product?.image;
