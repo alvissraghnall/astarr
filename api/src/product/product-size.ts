@@ -4,6 +4,6 @@ export enum ProductSize {
     SMALL = "s",
     MEDIUM = "m",
     LARGE = "l",
-    XL = "xl",
+    XL = "xl", 
     XXL = "xxl"
 }

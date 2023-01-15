@@ -9,23 +9,27 @@ import {
 import 'swiper/swiper-bundle.css';
 
 import { FreeMode } from "swiper";
+import { Link } from "react-router-dom";
 
 interface ItemProps {
     item: {
         id: number,
         img: string,
-        title: string
+        title: string,
+        cat: Array<string>
     }
 }
 
 const Item = ({ item }: ItemProps) => {
     return ( 
         <div className="flex-1 m-1 h-[70vh] relative">
+            <Link to={`/products/${item.cat[0]}`}>
+            
             <img 
                 className="w-full h-full object-cover" 
                 alt={item.title} 
                 src={(images as any)["collections"][item.img]}
-            />
+                />
 
             <div className="absolute w-full mt-11 h-full top-0 left-0 flex items-center justify-center flex-col">
 
@@ -38,6 +42,7 @@ const Item = ({ item }: ItemProps) => {
                     shop now
                 </button>
             </div>
+            </Link>≥
         </div>
     );
 

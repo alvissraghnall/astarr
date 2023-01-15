@@ -14,12 +14,12 @@ export class ProductService {
         const newProduct = new this.productModel(productDTO);
         const savedProd = await newProduct.save();
 
-        return this.mapProductToDTO((savedProd as Product), new ProductDTO());
+        return this.mapProductToDTO((savedProd as ProductDocument), new ProductDTO());
     }
 
     async getProduct (id: ObjectId | string) {
         const prod = await this.productModel.findById(id);
-        return this.mapProductToDTO(<Product> prod, new ProductDTO());
+        return this.mapProductToDTO(<ProductDocument> prod, new ProductDTO());
     }
 
     async getProducts(sortOptions: ProductSortOptions): Promise<ProductDTO[]> {
@@ -50,7 +50,7 @@ export class ProductService {
         return this.mapProductToDTO(updatedProduct, new ProductDTO());
     }
 
-    private mapProductToDTO (product: Product, dto: ProductDTO): ProductDTO {
+    private mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
         dto.categories = product?.categories;
         dto.createdAt = product?.createdAt;
         dto.updatedAt = product?.updatedAt;
@@ -61,6 +61,9 @@ export class ProductService {
         dto.size = product?.size;
         dto.color = product?.color;
         dto.price = product?.price;
+        dto.inStock = product?.inStock;
+        dto.id = product?._id.toString();
+        // console.log(product, product?._id);
         return dto;
     }
 

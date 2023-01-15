@@ -12,7 +12,7 @@ export const sliderItems = [
         img: "weatherIrrespective",
         title: "all-weather friendly",
         desc: "Look your absolute best irrespective of weather conditions. Get up to 16% off on selected purchases.",
-        bg: "c9d113"
+        bg: "c9d113",
     },
     {
         id: 2,
@@ -63,37 +63,44 @@ export const collectionItems = [
     {
         id: 0,
         img: "dress",
-        title: "dresses"
+        title: "dresses",
+        cat: ["women"]
     },
     {
         id: 1,
         img: "hoodie",
-        title: "hoodies"
+        title: "hoodies",
+        cat: ["jackets"]
     },
     {
         id: 2,
         img: "jeans",
-        title: "jeans"
+        title: "jeans",
+        cat: ["jeans"]
     },
     {
         id: 3,
         img: "lingerie",
-        title: "lingeries"
+        title: "lingeries",
+        cat: ["women"]
     },
     {
         id: 4,
         img: "sweater",
-        title: "sweaters"
+        title: "sweaters",
+        cat: ["sweaters"]
     },
     {
         id: 5,
         img: "shirt",
-        title: "shirts"
+        title: "shirts",
+        cat: ["men"]
     },
     {
         id: 6,
         img: "suit",
-        title: "suits"
+        title: "suits",
+        cat: ["men"]
     }
 ]
 
@@ -127,11 +134,11 @@ export const productItems = [
         img: "product_7"
     },
     {
-        img: "product_8",
+        img: "product_9",
         id: 7
     },
     {
-        img: "product_9",
+        img: "product_10",
         id: 8
     }
     
