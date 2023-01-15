@@ -1,7 +1,27 @@
+import { useEffect, useState } from "react";
 import { MdOutlineAddShoppingCart, MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 import images from "../assets";
+import { getProduct, PUBLIC_REQ } from "../services";
 
 const Product = () => {
+    const location = useLocation();
+    const id = location.pathname.split("/")[2];
+
+    const [product, setProduct] = useState(null);
+
+    useEffect(() => {
+        const ran = async () => {
+            try {
+                const prod = await getProduct(id);
+                setProduct(prod);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        ran();
+    }, [id]);
+
     return (
         <div className="md:p-12 p-4 pt-6 flex flex-col md:flex-row">
             <div className="flex-1">

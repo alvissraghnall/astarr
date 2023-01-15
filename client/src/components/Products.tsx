@@ -4,6 +4,7 @@ import { AiOutlineShoppingCart, AiOutlineSearch } from "react-icons/ai";
 import { productItems } from "../assets/constants";
 import images from "../assets";
 import { getProducts } from '../services';
+import { Link } from 'react-router-dom';
 
 interface ProductItem {
     item: {
@@ -36,9 +37,11 @@ const Item = ({ item }: ProductItem) => (
             <div className="items-center m-3 w-10 rounded-[50%] flex justify-center transition-all duration-700 ease-in-out bg-white/95 h-10 hover:bg-[#e9f5f5] hover:scale-[1.1] cursor-pointer">
                 <AiOutlineShoppingCart />
             </div>
-            <div className="items-center m-3 w-10 rounded-[50%] flex justify-center transition-all duration-700 ease-in-out bg-white/95 h-10 hover:bg-[#e9f5f5] hover:scale-[1.1] cursor-pointer">
-                <AiOutlineSearch />
-            </div>
+            <Link to={`/product/${item.id}`}>
+                <div className="items-center m-3 w-10 rounded-[50%] flex justify-center transition-all duration-700 ease-in-out bg-white/95 h-10 hover:bg-[#e9f5f5] hover:scale-[1.1] cursor-pointer">
+                    <AiOutlineSearch />
+                </div>
+            ▐</Link>
             <div className="items-center m-3 w-10 rounded-[50%] flex justify-center transition-all duration-700 ease-in-out bg-white/95 h-10 hover:bg-[#e9f5f5] hover:scale-[1.1] cursor-pointer">
                 <MdOutlineFavoriteBorder />
             </div>
