@@ -25,7 +25,9 @@ export const AUTH_REQ = () => {
         const JWT_TOKEN = localStorage.getItem("JWT_TOKEN");
         // const JWT_TOKEN = localStorage.getItem("__BTS__TKN");
 
-        config.headers!["Authorization"] = JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : '';
+        config.headers = config.headers ?? {};
+
+        config.headers["Authorization"] = JWT_TOKEN ? `Bearer ${JWT_TOKEN}` : '';
         return config;
     })
     return instance;

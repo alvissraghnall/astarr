@@ -1,14 +1,18 @@
 import React, { FormEvent, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import ShoppingCartIcon from "./icons/ShoppingCartIcon";
+import { useSelector } from "react-redux";
 
-const ShoppingCartBadge = () => (
+const ShoppingCartBadge = () => {
+    const quantity = useSelector(state => state.cart.quantity);
+    return (
     <button type="button" className="inline-flex relative items-center p-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         <ShoppingCartIcon />
         <span className="sr-only">Cart</span>
         <div className="inline-flex absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-white dark:border-gray-900">8</div>
     </button>
 )
+}
 
 const NavBar = () => {
 

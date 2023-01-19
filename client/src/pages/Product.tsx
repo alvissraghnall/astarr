@@ -3,12 +3,31 @@ import { MdOutlineAddShoppingCart, MdOutlineRemoveShoppingCart } from "react-ico
 import { useLocation } from "react-router-dom";
 import images from "../assets";
 import { getProduct, PUBLIC_REQ } from "../services";
+import { Product } from "../types/Product";
+
+export enum QuantityChange {
+    DECREASE,
+    INCREASE
+}
 
 const Product = () => {
     const location = useLocation();
     const id = location.pathname.split("/")[2];
 
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState<Product>(null);
+    const [quantity, setQuantity] = useState(1);
+    const [color, setColor] = useState();
+    const [size, setSize] = useState();
+
+    const handleQuantityChange = (type: QuantityChange, value?: number) => {
+        switch(type) {
+            case QuantityChange.DECREASE:
+                quantity >= 1 && setQuantity(prev => prev - 1);
+            
+            case QuantityChange.INCREASE: 
+                setQuantity(prev => value ? value : prev + 1);
+        }
+    }
 
     useEffect(() => {
         const ran = async () => {
@@ -65,7 +84,11 @@ const Product = () => {
                     <div className="items-center flex font-bold">
                         { /** amount container */}
                         <MdOutlineRemoveShoppingCart size={28} className="cursor-pointer" />
-                        <option className="justify-center my-0 mx-1 w-8 h-8 rounded-lg border-2 border-solid border-teal-400 flex items-center">1</option>
+                        <input 
+                            className="justify-center my-0 mx-1 w-8 h-8 rounded-lg border-2 border-solid border-teal-400 flex items-center" 
+                            value={quantity} 
+                            type="number"
+                            onChange={ev => handleQuantityChange(QuantityChange.INCREASE, ev.target.value)} />
                         <MdOutlineAddShoppingCart size={28} className="cursor-pointer" />
                     </div>
                     <button className="uppercase border-solid border-teal-500 font-medium p-4 rounded-sm bg-white cursor-pointer hover:bg-[#f9f4f2]">
