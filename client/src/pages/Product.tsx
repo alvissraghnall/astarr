@@ -3,7 +3,7 @@ import { MdOutlineAddShoppingCart, MdOutlineRemoveShoppingCart } from "react-ico
 import { useLocation } from "react-router-dom";
 import images from "../assets";
 import { getProduct, PUBLIC_REQ } from "../services";
-import { Product } from "../types/Product";
+import { Product as ProductType } from "../types/Product";
 
 export enum QuantityChange {
     DECREASE,
@@ -14,7 +14,7 @@ const Product = () => {
     const location = useLocation();
     const id = location.pathname.split("/")[2];
 
-    const [product, setProduct] = useState<Product>(null);
+    const [product, setProduct] = useState<ProductType | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [color, setColor] = useState();
     const [size, setSize] = useState();
@@ -88,7 +88,7 @@ const Product = () => {
                             className="justify-center my-0 mx-1 w-8 h-8 rounded-lg border-2 border-solid border-teal-400 flex items-center" 
                             value={quantity} 
                             type="number"
-                            onChange={ev => handleQuantityChange(QuantityChange.INCREASE, ev.target.value)} />
+                            onChange={ev => handleQuantityChange(QuantityChange.INCREASE, Number.parseInt(ev.target.value))} />
                         <MdOutlineAddShoppingCart size={28} className="cursor-pointer" />
                     </div>
                     <button className="uppercase border-solid border-teal-500 font-medium p-4 rounded-sm bg-white cursor-pointer hover:bg-[#f9f4f2]">

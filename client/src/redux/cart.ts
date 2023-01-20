@@ -27,4 +27,6 @@ const cartSlice = createSlice<{
 
 export const { addProduct } = cartSlice.actions;
 
+export type RootState = ReturnType<{cart: typeof cartSlice.getInitialState}>; 
+
 export default cartSlice.reducer;

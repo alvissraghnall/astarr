@@ -2,9 +2,10 @@ import React, { FormEvent, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/cart";
 
 const ShoppingCartBadge = () => {
-    const quantity = useSelector(state => state.cart.quantity);
+    const quantity = useSelector((state: RootState) => state.cart.quantity);
     return (
     <button type="button" className="inline-flex relative items-center p-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         <ShoppingCartIcon />
