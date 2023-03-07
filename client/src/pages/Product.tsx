@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { MdOutlineAddShoppingCart, MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import images from "../assets";
+import { cartActions } from "../redux/cart";
 import { getProduct, PUBLIC_REQ } from "../services";
 import { Product as ProductType } from "../types/Product";
 
@@ -18,6 +21,17 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1);
     const [color, setColor] = useState();
     const [size, setSize] = useState();
+
+    const dispatch = useDispatch();
+
+    const addToCart = () => {
+        dispatch(cartActions.addProduct(
+            product
+        ));
+
+        toast.success("Product successfully added to cart!");
+        // alert("Added to cart!");
+    }
 
     const handleQuantityChange = (type: QuantityChange, value?: number) => {
         switch(type) {
@@ -88,10 +102,11 @@ const Product = () => {
                             className="justify-center my-0 mx-1 w-8 h-8 rounded-lg border-2 border-solid border-teal-400 flex items-center" 
                             value={quantity} 
                             type="number"
-                            onChange={ev => handleQuantityChange(QuantityChange.INCREASE, Number.parseInt(ev.target.value))} />
+                            onChange={ev => handleQuantityChange(QuantityChange.INCREASE, Number.parseInt(ev.target.value))} 
+                        />
                         <MdOutlineAddShoppingCart size={28} className="cursor-pointer" />
                     </div>
-                    <button className="uppercase border-solid border-teal-500 font-medium p-4 rounded-sm bg-white cursor-pointer hover:bg-[#f9f4f2]">
+                    <button className="uppercase border-solid border-teal-500 font-medium p-4 rounded-sm bg-white cursor-pointer hover:bg-[#f9f4f2]" onClick={addToCart}>
                         add to cart
                     </button>
                 </div>

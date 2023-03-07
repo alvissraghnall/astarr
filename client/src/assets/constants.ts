@@ -64,43 +64,43 @@ export const collectionItems = [
         id: 0,
         img: "dress",
         title: "dresses",
-        cat: ["women"]
+        cat: "women"
     },
     {
         id: 1,
         img: "hoodie",
         title: "hoodies",
-        cat: ["jackets"]
+        cat: "jackets"
     },
     {
         id: 2,
         img: "jeans",
         title: "jeans",
-        cat: ["jeans"]
+        cat: "jeans"
     },
     {
         id: 3,
         img: "lingerie",
         title: "lingeries",
-        cat: ["women"]
+        cat: "women"
     },
     {
         id: 4,
         img: "sweater",
         title: "sweaters",
-        cat: ["sweaters"]
+        cat: "sweaters"
     },
     {
         id: 5,
         img: "shirt",
         title: "shirts",
-        cat: ["men"]
+        cat: "men"
     },
     {
         id: 6,
         img: "suit",
         title: "suits",
-        cat: ["men"]
+        cat: "men"
     }
 ]
 

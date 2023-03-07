@@ -16,14 +16,14 @@ interface ItemProps {
         id: number,
         img: string,
         title: string,
-        cat: Array<string>
+        cat: string
     }
 }
 
 const Item = ({ item }: ItemProps) => {
     return ( 
         <div className="flex-1 m-1 h-[70vh] relative">
-            <Link to={`/products/${item.cat[0]}`}>
+            <Link to={`/products/${item.cat}`}>
             
             <img 
                 className="w-full h-full object-cover" 
