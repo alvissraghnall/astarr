@@ -41,7 +41,7 @@ export class ProductController {
     @Get("")
     @Public()
     @HttpCode(HttpStatus.OK)
-    async getProducts (@Query("new") isNew: boolean, @Query("category") category: string) {
+    async getProducts (@Query("new") isNew?: boolean, @Query("category") category?: string) {
         return await this.productService.getProducts({
             new: isNew, cat: category
         });
