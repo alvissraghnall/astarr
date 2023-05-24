@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, UseGuards, HttpStatus, Post, Put, Req, BadRequestException, Param, Delete, Get, NotFoundException } from '@nestjs/common';
+import { Body, Controller, HttpCode, UseGuards, HttpStatus, Post, Put, Req, BadRequestException, Param, Delete, Get, NotFoundException, ForbiddenException } from '@nestjs/common';
 import type { Request } from 'express';
 import { Role } from 'src/auth/decorator/role.decorator';
 import { RoleGuard } from 'src/auth/guard/role.guard';
@@ -7,6 +7,8 @@ import { Role as UserRole } from 'src/user/user-role';
 import { CartService } from './cart.service';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { ObjectId } from 'mongoose';
+import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
+import { UserDocument } from 'src/user/user.schema';
 
 
 @Controller('cart')
@@ -16,7 +18,7 @@ export class CartController {
 
     @Post("")
     @HttpCode(HttpStatus.CREATED)
-    async createCart (@Req() req: Request, @Body() cartDTO: CartDTO) {
+    async createCart (@Body() cartDTO: CartDTO) {
         return await this.cartService.create(cartDTO)
             .catch(err => {
                 if (err.code == 11000) {
@@ -25,13 +27,20 @@ export class CartController {
             });;
     }
 
-    @Get(":id")
-    @UseGuards(VerifyUserIdGuard)
+    @Get("/:id")
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
     @HttpCode(HttpStatus.OK)
-    async getProducts (@Param("id") id: string | ObjectId) {
-        const userCart = await this.cartService.get(id);
-        if (!userCart.userId) throw new NotFoundException();
-        return userCart;
+    async getProducts (@Param("id") id: string) {
+        const cart = await this.cartService.get(id);
+        
+        return cart;
+    }
+
+    @Get("/user")
+    @HttpCode(HttpStatus.OK)
+    async getCartForUser (@CurrentUser() user : UserDocument) {
+        return  this.cartService.getCartForUser(user.id ?? user._id.toString());
     }
 
     @Get("")
@@ -43,11 +52,19 @@ export class CartController {
     }
 
 
-    @Put(':id')
-    @UseGuards(VerifyUserIdGuard)
-    async updateProduct (@Param("id") id: string, @Body() cartDTO: Partial<CartDTO> ) {
-        if(cartDTO.userId !== id) throw new BadRequestException();
-        return await this.cartService.update(id, cartDTO);
+    @Put('/:cartId')
+    async updateProducts (@Param("cartId") cartId: string, @Body() cartDTO: Partial<CartDTO>, @CurrentUser() user : UserDocument ) {
+        const cart = await this.cartService.get(cartId, true);
+
+        if (!cart) {
+            throw new NotFoundException('Cart not found');
+        }
+    
+        if (cart.userId !== user.id) {
+            throw new ForbiddenException('You are not authorized to update this cart');
+        }
+
+        return await this.cartService.update(cart, cartDTO);
     }
 
     @Delete(":id")

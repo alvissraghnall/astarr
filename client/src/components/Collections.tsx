@@ -2,10 +2,9 @@ import React from "react";
 import images from "../assets";
 import { collectionItems } from "../assets/constants";
 
-
 import {
     Swiper, SwiperSlide
-} from "swiper/react/swiper-react.js";
+} from "swiper/react";
 import 'swiper/swiper-bundle.css';
 
 import { FreeMode } from "swiper";

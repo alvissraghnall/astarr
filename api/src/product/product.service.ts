@@ -58,8 +58,8 @@ export class ProductService {
         dto.title = product?.title;
         dto.desc = product?.desc;
         dto.image = product?.image;
-        dto.size = product?.size;
-        dto.color = product?.color;
+        dto.sizes = product?.sizes;
+        dto.colors = product?.colors;
         dto.price = product?.price;
         dto.inStock = product?.inStock;
         dto.id = product?._id.toString();

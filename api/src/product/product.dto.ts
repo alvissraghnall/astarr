@@ -19,10 +19,10 @@ export class ProductDTO {
     @Expose()
     category: string;
 
-    size: ProductSize[];
+    sizes: ProductSize[];
 
     @IsArray()
-    color: string[];
+    colors: string[];
     
     @IsNotEmpty()
     price: number;

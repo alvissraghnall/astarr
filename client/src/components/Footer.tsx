@@ -49,12 +49,16 @@ const Footer = () => {
             <ul className="m-0 p-0 list-none flex flex-wrap">
                 <li className="mb-2.5 w-1/2"> Home </li>
                 <li className="mb-2.5 w-1/2"> Cart </li>
-                <li className="mb-2.5 w-1/2"> Track Your Order </li>
+                <li className="mb-2.5 w-1/2"> Order Status </li>
                 <li className="mb-2.5 w-1/2"> About Us </li>
-                <li className="mb-2.5 w-1/2"> Home </li>
-                <li className="mb-2.5 w-1/2"> Home </li>
-                <li className="mb-2.5 w-1/2"> Home </li>
-                <li className="mb-2.5 w-1/2"> Home </li>
+                <li className="mb-2.5 w-1/2"> Investors </li>
+                <li className="mb-2.5 w-1/2"> Blog </li>
+                <li className="mb-2.5 w-1/2"> Careers </li>
+                <li className="mb-2.5 w-1/2"> News </li>
+                <li className="mb-2.5 w-1/2"> Payment Options </li>
+                <li className="mb-2.5 w-1/2"> FAQ </li>
+                <li className="mb-2.5 w-1/2"> Shipping & Delivery </li>
+                <li className="mb-2.5 w-1/2"> Gift Cards </li>
             </ul>
         </div>
         <div className="flex-1 p-5 bg-[#fcf5f5]">

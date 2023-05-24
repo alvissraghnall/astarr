@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import images from "../assets";
 import { cartActions } from "../redux/cart";
 import { getProduct, PUBLIC_REQ } from "../services";
-import { Product as ProductType } from "../types/Product";
+import { Product as ProductType } from "../models/product.model";
 
 export enum QuantityChange {
     DECREASE,
@@ -37,9 +37,14 @@ const Product = () => {
         switch(type) {
             case QuantityChange.DECREASE:
                 quantity >= 1 && setQuantity(prev => prev - 1);
+                break;
             
             case QuantityChange.INCREASE: 
                 setQuantity(prev => value ? value : prev + 1);
+                break;
+
+            default:
+
         }
     }
 

@@ -18,7 +18,7 @@ export class OrderService {
         return this.mapOrderToDTO(saved, new OrderDTO());
     }
 
-    async get (userId: ObjectId | string): Promise<OrderDTO[]> {
+    async getAllOrdersByUser (userId: ObjectId | string): Promise<OrderDTO[]> {
         const userOrders = await this.orderModel.find({ userId });
 
         let inDTO: OrderDTO[] = [];
@@ -28,6 +28,11 @@ export class OrderService {
             }
         }
         return inDTO;
+    }
+
+    async getById (id: string) {
+        const order = await this.orderModel.findById(id);
+        return this.mapOrderToDTO(order, new OrderDTO());
     }
 
     async getAll (): Promise<OrderDTO[]> {

@@ -11,6 +11,7 @@ import { User, UserDocument } from './user.schema';
 import { HashService } from './password-hash.service';
 import { ObjectId } from 'mongoose';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
+import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -32,8 +33,8 @@ export class UserController {
     @UseInterceptors(ClassSerializerInterceptor)
     @Put('/:id')
     @UseGuards(VerifyUserIdGuard)
-    async updateUser (@Param("id") id: string, @Req() req: Request, @Body() userDTO: Partial<UserDTO> ) {
-        console.log(req.user, id);
+    async updateUser (@Param("id") id: string, @CurrentUser() user: UserDocument, @Body() userDTO: Partial<UserDTO> ) {
+        console.log(user, id);
 
         if (userDTO.role) throw new BadRequestException("Cannot edit user role!");
         
@@ -41,7 +42,7 @@ export class UserController {
             userDTO.password = await this.hashService.hashPassword(userDTO.password);
         }
         try {
-            const updatedUser = await this.service.updateUser((req.user as UserDocument)._id, userDTO);
+            const updatedUser = await this.service.updateUser(user._id, userDTO);
             const userDTOWithoutPassword = this.service.mapUserToDTOWithoutPassword(updatedUser, new UserWithoutPassword());
             return userDTOWithoutPassword;
         } catch (err) {

@@ -14,22 +14,22 @@
     "react-icons": "^4.6.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
-    "react-scripts": "4.0.3",
     "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^9.1.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.1",
-    "swiper": "^8.4.4",
+    "swiper": "^9.3.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "yarn tailwind:css && react-scripts build",
+    "start": "tsc && vite",
+    "build": "tsc && vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently \"yarn tailwind:css\" \"yarn start\"",
     "tailwind:watch": "postcss ./src/styles/tailwind.css -o ./src/index.css --watch",
-    "tailwind:css": "postcss ./src/styles/tailwind.css -o ./src/index.css"
+    "tailwind:css": "postcss ./src/styles/tailwind.css -o ./src/index.css",
+    "serve": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -54,11 +54,13 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",
     "postcss-cli": "^10.0.0",
     "tailwind-clip-path": "^1.0.0",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "vite": "^4.3.8"
   }
 }

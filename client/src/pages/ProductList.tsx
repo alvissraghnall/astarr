@@ -1,8 +1,6 @@
-
 import { ChangeEvent, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { Products } from '../components';
-
 
 
 const ProductList = () => {

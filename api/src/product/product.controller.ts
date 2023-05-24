@@ -48,13 +48,15 @@ export class ProductController {
     }
 
     @Put('/:id')
-    @UseGuards(VerifyUserIdGuard)
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
     async updateProduct (@Param("id") id: string, @Body() productDTO: Partial<ProductDTO> ) {
         return await this.productService.updateProduct(id, productDTO);
     }
 
     @Delete("/:id")
-    @UseGuards(VerifyUserIdGuard)
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
     async deleteProduct (@Param("id") id: string ): Promise<{ message: string; }> {
         await this.productService.deleteProduct(id);
         return {

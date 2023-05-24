@@ -10,7 +10,10 @@ export default function Home () {
     <div className='h-full'>
       <Slider />
       <Collections />
-      <Products />
+      <div className='my-2'>
+        <h3 className='capitalize font-semibold text-xl font-mono my-3 text-center'> featured products </h3>
+        <Products />
+      </div>
     </div>
   )
 }

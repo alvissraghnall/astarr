@@ -25,10 +25,10 @@ export class Product {
     category: string;
 
     @Prop({ type: Array, default: [ProductSize.MEDIUM] })
-    size: ProductSize[];
+    sizes: ProductSize[];
 
     @Prop({ required: true, type: Array })
-    color: string[];
+    colors: string[];
     
     @Prop({ required: true })
     price: number;
