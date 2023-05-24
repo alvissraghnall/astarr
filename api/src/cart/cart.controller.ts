@@ -9,6 +9,7 @@ import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { ObjectId } from 'mongoose';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
 import { UserDocument } from 'src/user/user.schema';
+import { CartObjectDTO } from './cart-object.dto';
 
 
 @Controller('cart')
@@ -53,7 +54,7 @@ export class CartController {
 
 
     @Put('/:cartId')
-    async updateProducts (@Param("cartId") cartId: string, @Body() cartDTO: Partial<CartDTO>, @CurrentUser() user : UserDocument ) {
+    async updateCart (@Param("cartId") cartId: string, @Body() cartDTO: Partial<CartDTO>, @CurrentUser() user : UserDocument ) {
         const cart = await this.cartService.get(cartId, true);
 
         if (!cart) {

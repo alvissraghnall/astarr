@@ -9,6 +9,8 @@ import { CartObject } from "./cart-object.schema";
 
 export class CartDTO {
 
+    id?: string | ObjectId;
+
     // @ValidateNested()
     // @Type(() => UserDTO)
     @IsMongoId()

@@ -26,7 +26,7 @@
     "build": "tsc && vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"yarn tailwind:css\" \"yarn start\"",
+    "dev": "yarn start",
     "tailwind:watch": "postcss ./src/styles/tailwind.css -o ./src/index.css --watch",
     "tailwind:css": "postcss ./src/styles/tailwind.css -o ./src/index.css",
     "serve": "vite preview"

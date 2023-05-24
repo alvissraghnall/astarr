@@ -17,6 +17,9 @@ const Login = () => {
         </div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
+            
+            <h1 className="text-gray-800 font-bold text-2xl mb-1">Hello Again!</h1>
+            <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
             <div>
               <h1 className="text-2xl font-semibold capitalize">sign in</h1>
             </div>

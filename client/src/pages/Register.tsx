@@ -6,6 +6,31 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+
+    
+    const formData = useState({
+        username: {
+            touched: false,
+            error: true,
+            value: ''
+        },
+        email: {
+            touched: false,
+            error: true,
+            value: ''
+        },
+        password: {
+            touched: false,
+            error: true,
+            value: ''
+        },
+        confirmPassword: {
+            touched: false,
+            error: true,
+            value: ''
+        },
+    });
+
     
 
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -28,8 +53,6 @@ const Register = () => {
             </div> */}
             <div className="flex w-full justify-center py-10 items-center bg-white">
                 <form className="bg-white" onSubmit={handleSubmit}>
-                    <h1 className="text-gray-800 font-bold text-2xl mb-1">Hello Again!</h1>
-                    <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
                     <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -70,7 +93,7 @@ const Register = () => {
                         <input 
                             className="pl-2 outline-none border-none" 
                             type="text" 
-                            name="enail address" 
+                            name="email" 
                             placeholder="Email Address" 
                             value={email}
                             onChange={ev => setEmail(ev.target.value)}
@@ -86,8 +109,24 @@ const Register = () => {
                         <input 
                             className="pl-2 outline-none border-none" 
                             type="text" 
-                            name=""
+                            name="password"
                             placeholder="Password" 
+                            value={password}
+                            onChange={ev => setPassword(ev.target.value)}
+                        />
+                    </div>
+                    <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clipRule="evenodd" />
+                        </svg>
+                        <input 
+                            className="pl-2 outline-none border-none" 
+                            type="text" 
+                            name="confirmPassword"
+                            placeholder="Confirm Password" 
                             value={password}
                             onChange={ev => setPassword(ev.target.value)}
                         />

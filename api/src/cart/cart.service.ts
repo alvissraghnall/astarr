@@ -22,8 +22,8 @@ export class CartService {
         return this.mapCartToDTO(await this.cartModel.findOne({ userId }), new CartDTO());
     }
 
-    get (id: string);
-    get(id: string, internal: boolean);
+    get (id: string): Promise<CartDTO>;
+    get(id: string, internal: boolean): Promise<CartDocument>;
 
     async get (id: string, internal?: boolean): Promise<CartDocument | CartDTO> {
         const cart = await this.cartModel.findById(id).exec();
@@ -53,11 +53,12 @@ export class CartService {
          
     }
 
-    private mapCartToDTO (cart: Cart, dto: CartDTO): CartDTO {
+    private mapCartToDTO (cart: CartDocument, dto: CartDTO): CartDTO {
         dto.createdAt = cart?.createdAt;
         dto.updatedAt = cart?.updatedAt;
         dto.userId = cart?.userId.toString();
         dto.products = cart?.products;
+        dto.id = cart?._id.toString();
 
         console.log(dto);
         return dto;

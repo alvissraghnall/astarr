@@ -8,4 +8,7 @@ export class CartObjectDTO {
 
     @IsNumber()
     quantity: number;
+
+    @IsNumber()
+    totalPrice: number;
 }

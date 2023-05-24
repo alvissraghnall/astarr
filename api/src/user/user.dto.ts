@@ -1,17 +1,19 @@
 import { Exclude } from 'class-transformer';
-import { IsEmail, IsNotEmpty,  } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength,  } from 'class-validator';
 import { Role } from './user-role';
 import { User } from './user.schema';
 
 export class UserDTO extends User {
     
     @IsNotEmpty()
+    @MinLength(3, {message: "username must have at least 3 characters."})
     username: string;
 
     @IsEmail()
     email: string;
 
     @IsNotEmpty()
+    @MinLength(8, { message: "Password must have at least 8 characters." })
     password: string;
 
     role: Role;
