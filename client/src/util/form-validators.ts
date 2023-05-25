@@ -11,7 +11,7 @@ export const validators = {
         return value && emailCheck(value);
     },
     password: (value: string) => {
-        return value && value.length >= 8 && /\d/g.test(value);
+        return value && value.length >= 8;
     },
     confirmPassword: (value: string, pwd: string) => {
         return pwd === value;
