@@ -3,6 +3,7 @@ import mongoose, { Document, Types } from 'mongoose';
 import { User } from 'src/user/user.schema';
 import { CartObject } from '../cart/cart-object.schema';
 import { Status } from './order-status';
+import { Product } from 'src/product/product.schema';
 
 export type OrderDocument = Order & Document;
 
@@ -11,20 +12,15 @@ export type OrderDocument = Order & Document;
 })
 export class Order {
 
-    @Prop({
-        required: true,
-        unique: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart"
-    })
-    cartId: Types.ObjectId;
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartObject" }] })
+    products: CartObject[]
 
     @Prop({
         required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     })
-    userId: User | Types.ObjectId;
+    userId: Types.ObjectId;
 
     @Prop({ required: true })
     amount: number;

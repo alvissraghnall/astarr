@@ -33,6 +33,15 @@ export class Product {
     @Prop({ required: true })
     price: number;
 
+    @Prop({ required: true, default: 0, min: 0, max: 5 })
+    rating: number;
+
+    @Prop({ required: false, max: 100, min: 0 })
+    discountPercentage: number;
+
+    @Prop({ required: true, default: false })
+    discountIsActive: boolean;
+
     @Prop()
     inStock: boolean;
 

@@ -1,5 +1,6 @@
 import { IsMongoId, IsNumber } from "class-validator";
 import { ProductDTO } from "src/product/product.dto";
+import { Product } from "src/product/product.schema";
 
 export class CartObjectDTO {
 
@@ -9,6 +10,9 @@ export class CartObjectDTO {
     @IsNumber()
     quantity: number;
 
-    @IsNumber()
-    totalPrice: number;
+    // @IsNumber()
+    // totalPrice: number;
+
+    product: Product;
+
 }

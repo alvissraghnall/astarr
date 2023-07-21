@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsAlpha, IsArray } from "class-validator";
+import { IsNotEmpty, IsAlpha, IsArray, IsNumber, IsBoolean } from "class-validator";
 import { Expose } from "class-transformer";
 import { ProductSize } from "./product-size";
 import type { ObjectId } from "mongoose";
@@ -26,6 +26,13 @@ export class ProductDTO {
     
     @IsNotEmpty()
     price: number;
+
+    @IsNumber()
+    rating?: number;
+
+    discountPercentage?: number;
+
+    discountIsActive?: boolean;
 
     inStock: boolean;
     

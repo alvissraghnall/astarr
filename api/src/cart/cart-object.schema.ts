@@ -12,10 +12,8 @@ export class CartObject {
     @Prop({ default: 1 })
     quantity: number;
 
-    @Prop({
-        type: Number, 
-    })
-    totalPrice: number;
+    // product: Product;
+
 }
 
 

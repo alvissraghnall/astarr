@@ -16,6 +16,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@order/*": ["./src/order/*"],
+      "@cart/*": ["./src/cart/*"],
+      "@product/*": ["./src/product/*"],
+      "@util/*": ["./src/util/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }
