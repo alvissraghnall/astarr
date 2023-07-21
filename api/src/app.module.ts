@@ -10,6 +10,8 @@ import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { StripeModule } from './stripe/stripe.module';
+import { FavouriteModule } from './favourite/favourite.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { StripeModule } from './stripe/stripe.module';
     AuthModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     StripeModule,
+    FavouriteModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

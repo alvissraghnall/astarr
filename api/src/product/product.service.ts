@@ -62,6 +62,9 @@ export class ProductService {
         dto.colors = product?.colors;
         dto.price = product?.price;
         dto.inStock = product?.inStock;
+        dto.rating = product.rating;
+        dto.discountIsActive = product.discountIsActive;
+        dto.discountPercentage = product.discountPercentage;
         dto.id = product?._id.toString();
         // console.log(product, product?._id);
         return dto;

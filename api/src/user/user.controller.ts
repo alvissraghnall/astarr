@@ -12,6 +12,7 @@ import { HashService } from './password-hash.service';
 import { ObjectId } from 'mongoose';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +23,10 @@ export class UserController {
     @Get('username')
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
+    @ApiOkResponse({
+        description: "get usrer"
+    
+    })
     async getUserByUsername(@Query('username') username: string, @Req() req: Request) {
         console.log(req.user, "======\n\n", username);
         const user = await this.service.getUserByUsername(username);

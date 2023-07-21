@@ -27,8 +27,7 @@ export class ProductDTO {
     @IsNotEmpty()
     price: number;
 
-    @IsNumber()
-    rating?: number;
+    rating: number;
 
     discountPercentage?: number;
 

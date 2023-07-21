@@ -22,7 +22,7 @@ export class ProductController {
         return await this.productService.createProduct(productDTO)
             .catch(err => {
                 if (err.code == 11000) {
-                    throw new BadRequestException(`Product with title ${productDTO.title} already exists!`);
+                    throw new BadRequestException(`Product with title: ${productDTO.title} already exists!`);
                 }
             });
     }

@@ -1,5 +1,5 @@
-import { Expose, Type } from "class-transformer";
-import { IsArray, IsMongoId, IsNotEmpty, IsNotEmptyObject, ValidateNested } from "class-validator";
+import { Exclude, Expose, Type,  } from "class-transformer";
+import { IsArray, IsMongoId, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsEmpty } from "class-validator";
 import { ObjectId } from "mongoose";
 import { UserDTO } from "src/user/user.dto";
 import { User } from "src/user/user.schema";
@@ -14,6 +14,7 @@ export class CartDTO {
     // @ValidateNested()
     // @Type(() => UserDTO)
     @IsMongoId()
+    @IsEmpty()
     userId: User | string | ObjectId;
 
     @ValidateNested({ each: true })
@@ -21,7 +22,7 @@ export class CartDTO {
     products?: CartObjectDTO[];
 
     @Expose()
-    createdAt: Date;
+    createdAt?: Date;
 
     updatedAt?: Date;
 }

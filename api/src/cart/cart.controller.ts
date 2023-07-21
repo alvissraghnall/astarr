@@ -1,21 +1,24 @@
 import { Body, Controller, HttpCode, UseGuards, HttpStatus, Post, Put, Req, BadRequestException, Param, Delete, Get, NotFoundException, ForbiddenException } from '@nestjs/common';
 import type { Request } from 'express';
-import { Role } from 'src/auth/decorator/role.decorator';
-import { RoleGuard } from 'src/auth/guard/role.guard';
+import { Role } from '@auth/decorator/role.decorator';
+import { RoleGuard } from '@auth/guard/role.guard';
 import { CartDTO } from './cart.dto';
 import { Role as UserRole } from 'src/user/user-role';
 import { CartService } from './cart.service';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { ObjectId } from 'mongoose';
-import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
-import { UserDocument } from 'src/user/user.schema';
+import { CurrentUser } from '@auth/decorator/current-user.decorator';
+import { UserDocument, User } from 'src/user/user.schema';
 import { CartObjectDTO } from './cart-object.dto';
 
 
 @Controller('cart')
 export class CartController {
 
-    constructor(private readonly cartService: CartService) {}
+    constructor(
+        private readonly cartService: CartService,
+        @CurrentUser() private readonly currUser: User
+    ) {}
 
     @Post("")
     @HttpCode(HttpStatus.CREATED)

@@ -13,6 +13,6 @@ export class CartObjectDTO {
     // @IsNumber()
     // totalPrice: number;
 
-    product: Product;
+    product?: Product;
 
 }

@@ -1,17 +1,23 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { Payload } from 'src/auth/auth.service';
+import { Payload } from '@auth/auth.service';
 import { HashService } from './password-hash.service';
 import { UserDTO, UserWithoutPassword } from './user.dto';
 import { User, UserDocument } from './user.schema';
 import { MongooseError } from "mongoose";
+import { Cart, CartDocument } from '@cart/cart.schema';
+import { CartDTO } from '@cart/cart.dto';
+import { CartService } from '@cart/cart.service';
 
 @Injectable()
 export class UserService {
     
-    constructor(@InjectModel(User.name) private readonly model: Model<UserDocument>, private hashService: HashService) {
-
+    constructor(
+        @InjectModel(User.name) private readonly model: Model<UserDocument>, 
+        private hashService: HashService,
+        private readonly cartService: CartService) {
+        
     }
 
     async create (userDTO: UserDTO) {
@@ -26,7 +32,15 @@ export class UserService {
 
         newUser.password = await this.hashService.hashPassword(newUser.password);
 
-        return await newUser.save();
+        await newUser.save();
+        
+        const newUserCart = await this.cartService.create({
+            userId: newUser._id ?? newUser.id,
+            products: []
+        });
+
+        console.log(newUser.toObject(), newUserCart);;
+        return newUser;
     } catch (err) {
         if(err.code == 11000 || err instanceof HttpException) {
             throw new BadRequestException({

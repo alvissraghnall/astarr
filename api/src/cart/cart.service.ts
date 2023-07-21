@@ -46,10 +46,10 @@ export class CartService {
         return this.mapCartToDTO(await this.cartModel.findByIdAndDelete(id), new CartDTO());
     }
 
-    async update (cart: CartDocument, updatedCart: Partial<CartDTO>): Promise<CartDTO> {
-        cart.products = updatedCart.products;
+    async update (cart: CartDocument, updatedCart: Partial<CartDTO>) {
+        // cart.products = updatedCart.products;
 
-        return this.mapCartToDTO(await cart.save(), new CartDTO());
+        // return this.mapCartToDTO(await cart.save(), new CartDTO());
          
     }
 

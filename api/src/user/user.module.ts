@@ -14,6 +14,7 @@ import { PassportModule } from '@nestjs/passport';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserStatsController } from './user-stats.controller';
+import { CartModule } from '@/cart/cart.module';
 
 @Module({
   providers: [UserService, HashService, AuthService, JwtStrategy, LocalStrategy, ConfigService, RoleGuard, JwtKeyService],
@@ -22,6 +23,7 @@ import { UserStatsController } from './user-stats.controller';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     AuthModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    CartModule
   ],
   exports: [MongooseModule]
 })
