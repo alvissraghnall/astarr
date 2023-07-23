@@ -7,7 +7,7 @@ export type CartObjectDocument = CartObject & Document;
 
 export class CartObject {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Product" })    
-    productId: Product;
+    productId: string;
 
     @Prop({ default: 1 })
     quantity: number;

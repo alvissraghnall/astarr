@@ -5,7 +5,7 @@ import { Product } from "src/product/product.schema";
 export class CartObjectDTO {
 
     @IsMongoId()
-    productId: ProductDTO;
+    productId: string;
 
     @IsNumber()
     quantity: number;

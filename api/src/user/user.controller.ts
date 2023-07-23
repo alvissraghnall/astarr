@@ -12,7 +12,7 @@ import { HashService } from './password-hash.service';
 import { ObjectId } from 'mongoose';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -24,8 +24,8 @@ export class UserController {
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
     @ApiOkResponse({
-        description: "get usrer"
-    
+        description: "get user by username",
+        // schema: 
     })
     async getUserByUsername(@Query('username') username: string, @Req() req: Request) {
         console.log(req.user, "======\n\n", username);
@@ -52,7 +52,6 @@ export class UserController {
             return userDTOWithoutPassword;
         } catch (err) {
             throw new BadRequestException();
-            
         }
     }
 

@@ -1,4 +1,4 @@
-import { Controller, Post, NotFoundException, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param, BadRequestException  } from '@nestjs/common';
+import { Controller, Post, NotFoundException, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param, BadRequestException, Patch  } from '@nestjs/common';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { Role } from '../auth/decorator/role.decorator';
@@ -6,6 +6,7 @@ import { RoleGuard } from '../auth/guard/role.guard';
 import { Role as UserRole } from "../user/user-role";
 import { ProductDTO } from './product.dto';
 import { ProductService } from './product.service';
+import { ApiNoContentResponse } from '@nestjs/swagger';
 
 
 @Controller('product')
@@ -14,7 +15,7 @@ export class ProductController {
     constructor(private readonly productService: ProductService) {}
 
 
-    @Post("create")
+    @Post("")
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
     @HttpCode(HttpStatus.CREATED)
@@ -50,7 +51,18 @@ export class ProductController {
     @Put('/:id')
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
-    async updateProduct (@Param("id") id: string, @Body() productDTO: Partial<ProductDTO> ) {
+    async replaceProduct (@Param("id") id: string, @Body() productDTO: ProductDTO) {
+        return await this.productService.replaceProduct(id, productDTO);
+    }
+
+    @Patch("/:id")
+    @ApiNoContentResponse()
+    @UseGuards(RoleGuard)
+    @Role(UserRole.ADMIN)
+    async updateProduct (
+        @Param("id") id: string,
+        @Body() productDTO: Partial<ProductDTO>
+    ) {
         return await this.productService.updateProduct(id, productDTO);
     }
 

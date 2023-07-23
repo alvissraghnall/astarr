@@ -18,12 +18,13 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["./src/*"],
+      "@user/*": ["./src/user/*"],
       "@auth/*": ["./src/auth/*"],
       "@order/*": ["./src/order/*"],
       "@cart/*": ["./src/cart/*"],
       "@product/*": ["./src/product/*"],
-      "@util/*": ["./src/util/*"]
+      "@util/*": ["./src/util/*"],
+      "@/*": ["./src/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"],

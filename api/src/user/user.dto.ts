@@ -4,6 +4,8 @@ import { Role } from './user-role';
 import { User } from './user.schema';
 
 export class UserDTO extends User {
+
+    id?: string;
     
     @IsNotEmpty()
     @MinLength(3, {message: "username must have at least 3 characters."})

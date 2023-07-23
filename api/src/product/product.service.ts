@@ -50,6 +50,16 @@ export class ProductService {
         return this.mapProductToDTO(updatedProduct, new ProductDTO());
     }
 
+    async replaceProduct (
+        id: ObjectId | string,
+        values: ProductDTO
+    ) {
+        return await this.productModel.findOneAndReplace({
+            id: id
+        }, values, { new: true, lean: true });
+
+    }
+
     private mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
         dto.category = product?.category;
         dto.createdAt = product?.createdAt;

@@ -37,7 +37,7 @@ export class Product {
     rating: number;
 
     @Prop({ required: false, max: 100, min: 0 })
-    discountPercentage: number;
+    discountPercentage?: number;
 
     @Prop({ required: true, default: false })
     discountIsActive: boolean;
