@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
    
   ],
   providers: [ProductService],
+  exports: [ProductService],
   controllers: [ProductController]
 })
 export class ProductModule {}

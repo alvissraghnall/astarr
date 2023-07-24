@@ -79,7 +79,6 @@ export class OrderService {
     private mapOrderToDTO (order: Order, dto: OrderDTO): OrderDTO {
         dto.createdAt = order?.createdAt;
         dto.updatedAt = order?.updatedAt;
-        dto.cartId = order?.cartId.toString();
         dto.address = order?.address;
         dto.amount = order?.amount;
         dto.status = order?.status;
