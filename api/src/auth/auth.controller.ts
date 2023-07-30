@@ -12,9 +12,8 @@ import { User } from '@/user/user.schema';
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService, 
-        private readonly userService: UserService,
         private readonly jwtKeyService: JwtKeyService
-        ) {}
+    ) {}
 
     
     @Public()
@@ -22,11 +21,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     async login (@Body() user: UserLoginPayload) {
         console.log(user);
-        const userInDb = await this.userService.getUserByUsername(user.username);
-
-        if (!userInDb || !await this.authService.validateUser(user.username, user.password)) throw new HttpException("Username or password provided incorrect.", HttpStatus.BAD_REQUEST);
-
-        return this.authService.login(userInDb, {
+        return this.authService.login(user, {
             algorithm: "RS256",
             privateKey: await this.jwtKeyService.getPrivKey(),
             expiresIn: "10d"
@@ -38,10 +33,7 @@ export class AuthController {
     @Post("create")
     async create (@Body() createUser: UserDTO) {
         
-        const newUser = await this.userService.create(createUser);
-        const userTransport = this.userService.mapUserToDTOWithoutPassword(newUser, new UserWithoutPassword());
-        // const { password, ...others } = newUser.toJSON();
-        return userTransport;
+        return this.authService.register(createUser);
     }
 
     @Get("whoami")

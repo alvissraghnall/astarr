@@ -22,7 +22,7 @@ export class ProductService {
         return this.mapProductToDTO(<ProductDocument> prod, new ProductDTO());
     }
 
-    async getProducts(sortOptions: ProductSortOptions): Promise<ProductDTO[]> {
+    async getProducts(sortOptions?: ProductSortOptions): Promise<ProductDTO[]> {
         const products = sortOptions.cat ? await this.productModel.find({
             categories: { $in: [sortOptions.cat] }
         })
@@ -60,7 +60,7 @@ export class ProductService {
 
     }
 
-    private mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
+    mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
         dto.category = product?.category;
         dto.createdAt = product?.createdAt;
         dto.updatedAt = product?.updatedAt;
@@ -75,7 +75,7 @@ export class ProductService {
         dto.rating = product.rating;
         dto.discountIsActive = product.discountIsActive;
         dto.discountPercentage = product.discountPercentage;
-        dto.id = product?._id.toString();
+        dto.id = product?.id?.toString();
         // console.log(product, product?._id);
         return dto;
     }

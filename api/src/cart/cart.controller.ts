@@ -17,7 +17,7 @@ export class CartController {
 
     constructor(
         private readonly cartService: CartService,
-        @CurrentUser() private readonly currUser: User
+        // @CurrentUser() private readonly currUser: User
     ) {}
 
     @Post("")

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { BadRequestException, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from "@nestjs/mongoose";
@@ -15,16 +15,37 @@ import { RoleGuard } from 'src/auth/guard/role.guard';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserStatsController } from './user-stats.controller';
 import { CartModule } from '@/cart/cart.module';
+import { CartService } from '@cart/cart.service';
 
 @Module({
-  providers: [UserService, HashService, AuthService, JwtStrategy, LocalStrategy, ConfigService, RoleGuard, JwtKeyService],
+  providers: [UserService, CartService, HashService, AuthService, JwtStrategy, LocalStrategy, ConfigService, RoleGuard, JwtKeyService],
   controllers: [UserController, UserStatsController],
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeatureAsync([
+      { 
+        name: User.name, 
+        useFactory: () => {
+          const schema = UserSchema;
+          schema.post('save', (error, doc, next) => {
+            if (error.keyValue.email != null && error.name === "MongoError" && error.code === 11000) {
+              console.log("Email must be unique");
+              next(new BadRequestException('Email already exists, please try another'));
+            } else if (error.keyValue.username != null && error.name === "MongoError" && error.code === 11000) {
+              console.log("Username must be unique");
+              next(new BadRequestException('Username already in use, please try another'));
+            } else {
+              console.log("not found any idea, search for another reasons");
+              next(error);
+            }
+          });
+          return schema;
+        }
+      }
+    ]),
     AuthModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    CartModule
+    // CartModule
   ],
-  exports: [MongooseModule]
+  exports: [MongooseModule, UserService]
 })
 export class UserModule {}

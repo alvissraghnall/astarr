@@ -17,7 +17,6 @@ export class UserService {
         @InjectModel(User.name) private readonly model: Model<UserDocument>, 
         private hashService: HashService,
         private readonly cartService: CartService) {
-        
     }
 
     async create (userDTO: UserDTO) {

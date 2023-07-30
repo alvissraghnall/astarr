@@ -5,6 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { Cart, CartSchema } from "./cart.schema";
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductModule } from '@/product/product.module';
+import { ProductService } from '@product/product.service';
+import { UserService } from '@user/user.service';
 
 @Module({
   imports: [
@@ -12,7 +14,8 @@ import { ProductModule } from '@/product/product.module';
     MongooseModule.forFeature([{ name: Cart.name, schema: CartSchema }]),
     ProductModule,
   ],
-  providers: [CartService],
+  providers: [CartService, ProductService],
+  exports: [CartService, MongooseModule, ProductModule],
   controllers: [CartController]
 })
 export class CartModule {}

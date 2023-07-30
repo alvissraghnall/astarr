@@ -15,7 +15,7 @@ export class CartService {
 
     constructor(
         @InjectModel(Cart.name) private readonly cartModel: Model<CartDocument>,
-        @Inject() private readonly productService: ProductService
+        private readonly productService: ProductService
     ) {}
 
     async create (cart: CartDTO): Promise<CartDTO> {

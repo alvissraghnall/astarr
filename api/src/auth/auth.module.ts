@@ -15,10 +15,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/user.schema';
 import { RoleGuard } from './guard/role.guard';
 import { VerifyUserIdGuard } from './guard/verify-user-id.guard';
+import { CartService } from '@cart/cart.service';
+import { CartModule } from '@cart/cart.module';
+import { ProductModule } from '@product/product.module';
 
 
 @Module({
   imports: [
+    CartModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), 
     PassportModule.register({ defaultStrategy: 'jwt', property: "user" }), JwtModule.registerAsync({
       imports: [ConfigModule, JwtKeyModule],
@@ -32,8 +36,8 @@ import { VerifyUserIdGuard } from './guard/verify-user-id.guard';
       
       inject: [ConfigService, JwtKeyService]
   })],
-  providers: [AuthService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService, RoleGuard, VerifyUserIdGuard],
-  exports: [AuthService, JwtStrategy, LocalStrategy, JwtModule, PassportModule, VerifyUserIdGuard],
+  providers: [AuthService, CartService, JwtKeyService, LocalStrategy, JwtStrategy, HashService, JwtService, UserService, ConfigService, RoleGuard, VerifyUserIdGuard],
+  exports: [AuthService, CartModule, CartService, JwtStrategy, LocalStrategy, JwtModule, PassportModule, VerifyUserIdGuard, MongooseModule],
   controllers: [AuthController]
 })
 export class AuthModule {}

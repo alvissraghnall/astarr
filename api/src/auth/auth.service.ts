@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { Types, Document } from 'mongoose';
-import { HashService } from 'src/user/password-hash.service';
-import { User, UserDocument } from 'src/user/user.schema';
-import { UserService } from 'src/user/user.service';
+import { HashService } from '@user/password-hash.service';
+import { UserDTO, UserWithoutPassword } from '@user/user.dto';
+import { User, UserDocument } from '@user/user.schema';
+import { UserService } from '@user/user.service';
+import { Document, Types } from 'mongoose';
+import { UserLoginPayload } from './payload/login.payload';
 
 export type UserEntity = User & Document<any, any, any> & {
     _id: Types.ObjectId;
@@ -36,11 +38,15 @@ export class AuthService {
       return user;
     }
 
-    async login(user: UserDocument, signOptions: JwtSignOptions = {}) {
-      console.log(user);
+    async login(user: UserLoginPayload, signOptions: JwtSignOptions = {}) {
+      const userInDb = await this.userService.getUserByUsername(user.username);
+
+      if (!userInDb || !await this.validateUser(user.username, user.password)) throw new HttpException("Username or password provided incorrect.", HttpStatus.BAD_REQUEST);
+
+      console.log(userInDb);
       const payload = {
-        username: user.username,
-        sub: user.id
+        username: userInDb.username,
+        sub: userInDb.id
       };
       console.log(payload);
       return {
@@ -48,5 +54,10 @@ export class AuthService {
       };
     }
 
-
+    async register (user: UserDTO) {
+      const newUser = await this.userService.create(user);
+      const userTransport = this.userService.mapUserToDTOWithoutPassword(newUser, new UserWithoutPassword());
+      // const { password, ...others } = newUser.toJSON();
+      return userTransport;
+    }
 }

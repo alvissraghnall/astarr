@@ -15,7 +15,7 @@ export class Product {
     })
     title: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     desc: string;
 
     @Prop({ required: true })
