@@ -21,36 +21,36 @@ export class UserService {
 
     async create (userDTO: UserDTO) {
         try {
-        const newUser = new this.model({
-            ...userDTO,
-            createdAt: new Date(),
-        });
-
-        const existingUser = await this.getUserByEmail(newUser.email);
-        if (existingUser) throw new HttpException({ message: "User already exists!"}, HttpStatus.BAD_REQUEST);
-
-        newUser.password = await this.hashService.hashPassword(newUser.password);
-
-        await newUser.save();
-        
-        const newUserCart = await this.cartService.create({
-            userId: newUser._id ?? newUser.id,
-            products: []
-        });
-
-        console.log(newUser.toObject(), newUserCart);;
-        return newUser;
-    } catch (err) {
-        if(err.code == 11000 || err instanceof HttpException) {
-            throw new BadRequestException({
-                message: "User already exists!",
-                statusCode: 400
+            const newUser = new this.model({
+                ...userDTO,
+                createdAt: new Date(),
             });
-        } else {
+
+            // const existingUser = await this.getUserByEmail(newUser.email);
+            // if (existingUser) throw new HttpException({ message: "User already exists!"}, HttpStatus.BAD_REQUEST);
+
+            newUser.password = await this.hashService.hashPassword(newUser.password);
+
+            await newUser.save();
+            
+            const newUserCart = await this.cartService.create({
+                userId: newUser._id ?? newUser.id,
+                products: []
+            });
+
+            console.log(newUser.toObject(), newUserCart);;
+            return newUser;
+        } catch (err) {
             console.log(err);
-            throw new InternalServerErrorException(err.message);
+            if(err instanceof BadRequestException) {
+                throw err;
+            } else if(err instanceof HttpException) {
+                
+            } else {
+                console.log(err);
+                throw new InternalServerErrorException(err.message);
+            }
         }
-    }
     }
 
     async getAll(limit?: number) {
