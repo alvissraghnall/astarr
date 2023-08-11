@@ -8,6 +8,7 @@ import { Public } from './decorator/public.decorator';
 import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CurrentUser } from './decorator/current-user.decorator';
 import { User } from '@/user/user.schema';
+import { UserInterceptor } from '@user/interceptor/user.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +31,7 @@ export class AuthController {
 
     
     @Public()
+    @UseInterceptors(UserInterceptor)
     @Post("create")
     async create (@Body() createUser: UserDTO) {
         
@@ -37,7 +39,7 @@ export class AuthController {
     }
 
     @Get("whoami")
-    @UseInterceptors(ClassSerializerInterceptor)
+    @UseInterceptors(UserInterceptor)
     @ApiOkResponse({
         description: 'Return current user',
         content: {
@@ -50,11 +52,10 @@ export class AuthController {
     })
     @ApiUnauthorizedResponse({
         description: 'User unauthorized',
-        
     })
     async whoAmI (
         @CurrentUser() currUser: User
-    ) {
+    ): Promise<UserDTO> {
         return currUser;
     }
 }

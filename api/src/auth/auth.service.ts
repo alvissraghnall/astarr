@@ -56,8 +56,8 @@ export class AuthService {
 
     async register (user: UserDTO) {
       const newUser = await this.userService.create(user);
-      const userTransport = this.userService.mapUserToDTOWithoutPassword(newUser, new UserWithoutPassword());
+      // const userTransport = this.userService.mapUserToDTOWithoutPassword(newUser, new UserWithoutPassword());
       // const { password, ...others } = newUser.toJSON();
-      return userTransport;
+      return newUser;
     }
 }

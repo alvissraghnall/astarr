@@ -1,4 +1,4 @@
-import { Controller, Post, NotFoundException, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param, BadRequestException, Patch  } from '@nestjs/common';
+import { Controller, Post, NotFoundException, Put, Delete, Get, Body, Query, UseGuards, HttpCode, HttpStatus, Param, BadRequestException, Patch, UseInterceptors  } from '@nestjs/common';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { VerifyUserIdGuard } from 'src/auth/guard/verify-user-id.guard';
 import { Role } from '../auth/decorator/role.decorator';
@@ -7,6 +7,7 @@ import { Role as UserRole } from "../user/user-role";
 import { ProductDTO } from './product.dto';
 import { ProductService } from './product.service';
 import { ApiNoContentResponse } from '@nestjs/swagger';
+import { ClassTransformInterceptor } from '@/common/interceptor/class-transform.interceptor';
 
 
 @Controller('product')
@@ -19,6 +20,7 @@ export class ProductController {
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
     @HttpCode(HttpStatus.CREATED)
+    @UseInterceptors(new ClassTransformInterceptor(ProductDTO))
     async createProduct (@Body() productDTO: ProductDTO) {
         return await this.productService.createProduct(productDTO)
             .catch(err => {
@@ -31,6 +33,7 @@ export class ProductController {
     @Get(":id")
     @Public()
     @HttpCode(HttpStatus.OK)
+    @UseInterceptors(new ClassTransformInterceptor(ProductDTO))
     async getProduct (@Param("id") id: string) {
         const prod = await this.productService.getProduct(id);
         if (!prod.createdAt) throw new NotFoundException();
@@ -41,6 +44,7 @@ export class ProductController {
 
     @Get("")
     @Public()
+    @UseInterceptors(new ClassTransformInterceptor(ProductDTO))
     @HttpCode(HttpStatus.OK)
     async getProducts (@Query("new") isNew?: boolean, @Query("category") category?: string) {
         return await this.productService.getProducts({
@@ -51,6 +55,7 @@ export class ProductController {
     @Put('/:id')
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
+    @UseInterceptors(new ClassTransformInterceptor(ProductDTO))
     async replaceProduct (@Param("id") id: string, @Body() productDTO: ProductDTO) {
         return await this.productService.replaceProduct(id, productDTO);
     }
@@ -59,6 +64,7 @@ export class ProductController {
     @ApiNoContentResponse()
     @UseGuards(RoleGuard)
     @Role(UserRole.ADMIN)
+    @UseInterceptors(new ClassTransformInterceptor(ProductDTO))
     async updateProduct (
         @Param("id") id: string,
         @Body() productDTO: Partial<ProductDTO>

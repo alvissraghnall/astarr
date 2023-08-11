@@ -1,4 +1,4 @@
-import { Exclude, Expose, Type,  } from "class-transformer";
+import { Exclude, Expose, Transform, Type,  } from "class-transformer";
 import { IsArray, IsMongoId, IsNotEmpty, IsNotEmptyObject, ValidateNested, IsEmpty } from "class-validator";
 import { ObjectId } from "mongoose";
 import { UserDTO } from "src/user/user.dto";
@@ -12,11 +12,12 @@ export class CartDTO {
     @ApiProperty({
         type: String
     })
+    @Expose()
     id?: string | ObjectId;
 
     // @ValidateNested()
-    // @Type(() => UserDTO)
-    @IsMongoId()
+    @Transform(({ value }) => value?.toString())
+    @Expose()
     @IsEmpty()
     @ApiProperty({
         type: String
@@ -24,6 +25,7 @@ export class CartDTO {
     userId?: User | string | ObjectId;
 
     @ValidateNested({ each: true })
+    @Expose()
     @Type(() => CartObjectDTO)
     products?: CartObjectDTO[];
 
@@ -36,5 +38,6 @@ export class CartDTO {
     @ApiProperty({
         type: Date
     })
+    @Expose()
     updatedAt?: Date;
 }

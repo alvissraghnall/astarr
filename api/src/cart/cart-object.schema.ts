@@ -1,20 +1,22 @@
 import { Prop, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { Document } from "mongoose";
-import { Product } from "src/product/product.schema";
+import { ProductDTO } from "@product/product.dto";
+import mongoose, { Document, ObjectId, PopulatedDoc } from "mongoose";
+import { Product, } from "src/product/product.schema";
 
 
 export type CartObjectDocument = CartObject & Document;
 
 export class CartObject {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Product" })    
-    productId: string;
 
-    @Prop({ default: 1 })
+    product: Product | string | ObjectId;
+
     quantity: number;
-
-    // product: Product;
 
 }
 
+export interface ICartObject extends mongoose.Document {
+    product: mongoose.Types.ObjectId | string | ProductDTO;
+    quantity: number;
+}
 
 export const CartObjectSchema = SchemaFactory.createForClass(CartObject);

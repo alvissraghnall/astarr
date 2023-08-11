@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
 import { User } from 'src/user/user.schema';
-import { CartObject } from './cart-object.schema';
+import { CartObject, ICartObject } from './cart-object.schema';
 
 export type CartDocument = Cart & Document;
 
@@ -18,7 +18,12 @@ export class Cart {
     })
     userId: User;
     
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartObject" }] })
+    @Prop([
+        {
+          product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true }, 
+          quantity: { type: Number, required: true, min: 1, default: 1 },
+        },
+    ])
     products: CartObject[]
 
     createdAt: Date;

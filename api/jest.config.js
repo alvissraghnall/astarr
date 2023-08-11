@@ -35,8 +35,8 @@ module.exports = {
         "ts"
     ],
     rootDir: "./",
-    // testRegex: ".*\\.spec\\.ts$",
-    testRegex: ".service\\.spec\\.ts$",
+    testRegex: ".*\\.spec\\.ts$",
+    // testRegex: ".service\\.spec\\.ts$",
     transform: {
         "^.+\\.(t|j)s$": "ts-jest"
     },

@@ -44,8 +44,6 @@ export class UserService {
             console.log(err);
             if(err instanceof BadRequestException) {
                 throw err;
-            } else if(err instanceof HttpException) {
-                
             } else {
                 console.log(err);
                 throw new InternalServerErrorException(err.message);

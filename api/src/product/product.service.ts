@@ -14,12 +14,14 @@ export class ProductService {
         const newProduct = new this.productModel(productDTO);
         const savedProd = await newProduct.save();
 
-        return this.mapProductToDTO((savedProd as ProductDocument), new ProductDTO());
+        // return this.mapProductToDTO((savedProd as ProductDocument), new ProductDTO());
+        return savedProd;
     }
 
     async getProduct (id: ObjectId | string) {
         const prod = await this.productModel.findById(id);
-        return this.mapProductToDTO(<ProductDocument> prod, new ProductDTO());
+        // return this.mapProductToDTO(<ProductDocument> prod, new ProductDTO());
+        return prod;
     }
 
     async getProducts(sortOptions?: ProductSortOptions): Promise<ProductDTO[]> {
@@ -29,25 +31,27 @@ export class ProductService {
             : (sortOptions.new ? await this.productModel.find().sort({ createdAt: -1 }).limit(1)
             : await this.productModel.find());
         
-        let inDTO: ProductDTO[] = [];
-        if (products) {
-            for (const product of products) {
-                inDTO.push(this.mapProductToDTO(product, new ProductDTO()))
-            }
-        }
-        return inDTO;
+        // let inDTO: ProductDTO[] = [];
+        // if (products) {
+            // for (const product of products) {
+            //     inDTO.push(this.mapProductToDTO(product, new ProductDTO()))
+            // }
+        // }
+        return products;
     }
 
     async deleteProduct (id: ObjectId | string) {
         const prod = await this.productModel.findByIdAndDelete(id);
-        return this.mapProductToDTO(prod, new ProductDTO());
+        // return this.mapProductToDTO(prod, new ProductDTO());
+        return prod;
     }
 
     async updateProduct (id: ObjectId | string, values: Partial<ProductDTO>) {
         const updatedProduct = await this.productModel.findByIdAndUpdate(id, {
            $set:  values
         }, { new: true, lean: true });
-        return this.mapProductToDTO(updatedProduct, new ProductDTO());
+        // return this.mapProductToDTO(updatedProduct, new ProductDTO());
+        return updatedProduct;
     }
 
     async replaceProduct (
@@ -60,24 +64,24 @@ export class ProductService {
 
     }
 
-    mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
-        dto.category = product?.category;
-        dto.createdAt = product?.createdAt;
-        dto.updatedAt = product?.updatedAt;
-        dto.image = product?.image;
-        dto.title = product?.title;
-        dto.desc = product?.desc;
-        dto.image = product?.image;
-        dto.sizes = product?.sizes;
-        dto.colors = product?.colors;
-        dto.price = product?.price;
-        dto.inStock = product?.inStock;
-        dto.rating = product.rating;
-        dto.discountIsActive = product.discountIsActive;
-        dto.discountPercentage = product.discountPercentage;
-        dto.id = product?.id?.toString();
-        // console.log(product, product?._id);
-        return dto;
-    }
+    // mapProductToDTO (product: ProductDocument, dto: ProductDTO): ProductDTO {
+    //     dto.category = product?.category;
+    //     dto.createdAt = product?.createdAt;
+    //     dto.updatedAt = product?.updatedAt;
+    //     dto.image = product?.image;
+    //     dto.title = product?.title;
+    //     dto.desc = product?.desc;
+    //     dto.image = product?.image;
+    //     dto.sizes = product?.sizes;
+    //     dto.colors = product?.colors;
+    //     dto.price = product?.price;
+    //     dto.inStock = product?.inStock;
+    //     dto.rating = product.rating;
+    //     dto.discountIsActive = product.discountIsActive;
+    //     dto.discountPercentage = product.discountPercentage;
+    //     dto.id = product?.id?.toString();
+    //     // console.log(product, product?._id);
+    //     return dto;
+    // }
 
 }
