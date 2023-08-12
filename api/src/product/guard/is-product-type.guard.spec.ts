@@ -14,7 +14,7 @@ describe('isProduct', () => {
       'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
     category: "men's clothing",
     size: ['m'],
-    color: ['ash', 'purple'],
+    colors: ['ash', 'purple'],
     price: 22.3,
     inStock: true,
     createdAt: new Date('2023-01-19T14:57:26.204Z'),
