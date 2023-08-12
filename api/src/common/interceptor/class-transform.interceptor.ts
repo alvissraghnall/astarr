@@ -12,7 +12,8 @@ export class ClassTransformInterceptor<T> implements NestInterceptor {
         return handler.handle().pipe(
             map((data: any) => {
                 return plainToInstance(this.targetClass, data, {
-                    excludeExtraneousValues: true
+                    excludeExtraneousValues: true,
+                    enableImplicitConversion: true
                 });
             })
         );

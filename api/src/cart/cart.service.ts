@@ -9,6 +9,7 @@ import { CartObjectDTO, CartObjectRequestDTO } from './cart-object.dto';
 import { ProductDTO } from '@/product/product.dto';
 import { User, UserDocument } from '@/user/user.schema';
 import { CartObject, CartObjectDocument } from './cart-object.schema';
+import { isProduct } from '@product/guard/is-product-type.guard';
 
 @Injectable()
 export class CartService {
@@ -33,8 +34,19 @@ export class CartService {
 
 
     async getCartForUser (userId: ObjectId | string, internal?: boolean): Promise<CartDocument> {
-        console.log(await this.cartModel.findOne({ userId }));
-        const cart = await this.cartModel.findOne({ userId }).populate("products").exec();
+        const cart = await this.cartModel.findOne({ userId }).populate({
+            path: "products",
+            model: "Product",
+            populate: {
+                path: "product",
+                model: "Product",
+                // populate: {
+                //     path: "product",
+                //     model: "Product",
+                //     select: ["desc"],
+                // }
+            }
+        }).exec();
         // if (!internal) return cart;
         console.log(cart);
         return cart;
@@ -95,35 +107,32 @@ export class CartService {
 
     async addItem (item: CartObjectRequestDTO, user: UserDocument) {
         const cart = await this.getCartForUser(user.id, true);
-        console.log(cart);
-        const existingItem = cart.products?.find((prod) => {
-            console.log(prod.product, typeof prod.product);
-            if (prod.product instanceof Product) {
+        // console.log(cart.products);
+        const existingItemIndex = cart.products?.findIndex((prod) => {
+            console.log(prod, prod.product, item.productId, typeof prod.product);
+            if (isProduct(prod.product)) {
                 return (prod.product as ProductDocument)._id.toString() === item.productId;
             }
-            return prod.product.toString() === item.productId;
+            return prod?.product?.toString() === item.productId;
         });
-
-        if (existingItem) {
-            existingItem.quantity += item.quantity ?? 1;
+        console.log(existingItemIndex);
+        if (existingItemIndex !== -1) {
+            cart.products[existingItemIndex].quantity += item.quantity || 1;          
         } else {
             const newItem: CartObject = {
                 product: item.productId, 
                 quantity: item.quantity || 1
             };
-            cart.products = [...(cart.products || []), newItem]; // Add the new item to the cart
+            console.log(newItem);
+            
+            cart.products.push(newItem);
+            // console.log(cart.products);
         }
 
-        const savedCart = (await cart.save()).populate({
-            path: "products",
-            populate: {
-                path: "product",
-                model: "Product"
-            }
-        });
+        const savedCart = await cart.save();
         
         // return this.mapCartToDTO(savedCart, new CartDTO());;
-        return savedCart;
+        return cart;
 
     }
 
@@ -148,8 +157,8 @@ export class CartService {
         const savedCart = (await cart.save()).populate({
             path: "products",
             populate: {
-                path: "productId",
-                model: "CartObject"
+                path: "product",
+                model: "Product"
             }
         });
         

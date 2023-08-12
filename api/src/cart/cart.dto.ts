@@ -22,10 +22,11 @@ export class CartDTO {
     @ApiProperty({
         type: String
     })
-    userId?: User | string | ObjectId;
+    userId?: string;
 
     @ValidateNested({ each: true })
     @Expose()
+    @ApiProperty({ description: 'Items in the cart', type: [CartObjectDTO] })
     @Type(() => CartObjectDTO)
     products?: CartObjectDTO[];
 
