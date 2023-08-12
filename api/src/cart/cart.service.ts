@@ -34,20 +34,15 @@ export class CartService {
 
 
     async getCartForUser (userId: ObjectId | string, internal?: boolean): Promise<CartDocument> {
-        const cart = await this.cartModel.findOne({ userId }).populate({
+        const cart = await this.cartModel.findOne({ userId });
+        if (!internal) return cart.populate({
             path: "products",
             model: "Product",
             populate: {
                 path: "product",
                 model: "Product",
-                // populate: {
-                //     path: "product",
-                //     model: "Product",
-                //     select: ["desc"],
-                // }
             }
-        }).exec();
-        // if (!internal) return cart;
+        });
         console.log(cart);
         return cart;
         // return this.mapCartToDTO(cart, new CartDTO());
@@ -63,7 +58,14 @@ export class CartService {
     }
 
     async getAll () {
-        const carts = await this.cartModel.find().populate("products").exec();
+        const carts = await this.cartModel.find().populate({
+            path: "products",
+            model: "Product",
+            populate: {
+                path: "product",
+                model: "Product",
+            }
+        }).exec();
         // let inDTO: CartDTO[] = [];
         // if (carts) {
         //     for (const cart of carts) {
@@ -73,8 +75,10 @@ export class CartService {
         return carts;
     }
 
-    async remove (id: ObjectId | string): Promise<CartDTO> {
-        return await this.cartModel.findByIdAndDelete(id);
+    async remove (userId: ObjectId | string): Promise<CartDTO> {
+        return await this.cartModel.findOneAndRemove({
+            userId
+        });
     }
 
     async update (cart: CartDocument, updatedCart: Partial<CartDTO>) {
@@ -109,7 +113,7 @@ export class CartService {
         const cart = await this.getCartForUser(user.id, true);
         // console.log(cart.products);
         const existingItemIndex = cart.products?.findIndex((prod) => {
-            console.log(prod, prod.product, item.productId, typeof prod.product);
+            // console.log(prod, prod.product, item.productId, typeof prod.product);
             if (isProduct(prod.product)) {
                 return (prod.product as ProductDocument)._id.toString() === item.productId;
             }
@@ -132,13 +136,21 @@ export class CartService {
         const savedCart = await cart.save();
         
         // return this.mapCartToDTO(savedCart, new CartDTO());;
-        return cart;
+        return cart.populate({
+            path: "products",
+            model: "Product",
+            populate: {
+                path: "product",
+                model: "Product",
+            }
+        });
 
     }
 
     async removeItem (
         itemId: string,
-        user: UserDocument
+        user: UserDocument,
+        quantityToRemove: number = 1,        
     ) {
         const cart = await this.getCartForUser(user.id, true);
 
@@ -146,14 +158,24 @@ export class CartService {
             throw new NotFoundException(`Cart not found for user: ${user.id}`);
         }
 
-        const itemIndex = cart.products?.findIndex((item: CartObjectDocument) => item._id.toString() === itemId);
+        const itemIndex = cart.products?.findIndex((prod) => {
+            
+            if (isProduct(prod.product)) {
+                return (prod.product as ProductDocument)._id.toString() === itemId;
+            }
+            return prod?.product?.toString() === itemId;
+        });
 
         if (itemIndex < 0 || itemIndex === undefined) {
             throw new NotFoundException(`Product with ID: ${itemId} not on user cart`);
         }
-
-        cart.products?.splice(itemIndex, 1);
         
+        if (cart.products[itemIndex].quantity <= quantityToRemove) {
+            cart.products.splice(itemIndex, 1); // Remove the item if its quantity is less than or equal to the quantity to remove
+        } else {
+            cart.products[itemIndex].quantity -= quantityToRemove; // Reduce the quantity
+        }
+
         const savedCart = (await cart.save()).populate({
             path: "products",
             populate: {

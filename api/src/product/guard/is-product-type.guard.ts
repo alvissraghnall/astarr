@@ -36,7 +36,7 @@ export function isProduct(object: any): object is Product {
         return true;
     } else {
         // Log which property is causing the validation to fail
-        console.error('Validation failed for property:', getPropertyCausingValidationFailure(object));
+        // console.error('Validation failed for property:', getPropertyCausingValidationFailure(object));
         return false;
     }
 }

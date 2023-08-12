@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, UseGuards, HttpStatus, Post, Put, Req, BadRequestException, Param, Delete, Get, NotFoundException, ForbiddenException, UseInterceptors } from '@nestjs/common';
+import { Body, Query, Controller, HttpCode, UseGuards, HttpStatus, Post, Put, Req, BadRequestException, Param, Delete, Get, NotFoundException, ForbiddenException, UseInterceptors } from '@nestjs/common';
 import type { Request } from 'express';
 import { Role } from '@auth/decorator/role.decorator';
 import { RoleGuard } from '@auth/guard/role.guard';
@@ -83,10 +83,9 @@ export class CartController {
         return await this.cartService.update(cart, cartDTO);
     }
 
-    @Delete(":id")
-    @UseGuards(VerifyUserIdGuard)
-    async deleteProduct (@Param("id") id: string ): Promise<{ message: string; }> {
-        await this.cartService.remove(id);
+    @Delete("/user")
+    async deleteCart (@CurrentUser() user : UserDocument ): Promise<{ message: string; }> {
+        await this.cartService.remove(user._id.toString());
         return {
             message: "Cart successfully deleted!"
         }
@@ -104,18 +103,19 @@ export class CartController {
         );
     }
 
-    @Delete("/remove-item/:productId")
+    @Put("/remove-item/:productId")
     @HttpCode(HttpStatus.NO_CONTENT)
     @UseInterceptors(new ClassTransformInterceptor(CartDTO))
     async removeProductFromCart (
         @Param("productId") productId: string,
-        @CurrentUser() user: UserDocument
+        @CurrentUser() user: UserDocument,
+        @Query('quantity') quantity: number,
     ) {
-        await this.cartService.removeItem(
-            productId, user
+        const updatedCart = await this.cartService.removeItem(
+            productId, user, quantity
         );
 
-        return;
+        return updatedCart;
     }
 
 
