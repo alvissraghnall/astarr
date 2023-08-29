@@ -1,5 +1,6 @@
 import { BadRequestException, Module } from '@nestjs/common';
 import { ProductService } from './product.service';
+import { ProductRepository } from './product.repository';
 import { ProductController } from './product.controller';
 import { PassportModule } from '@nestjs/passport';
 import { Product, ProductSchema } from './product.schema';
@@ -31,7 +32,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
    
   ],
-  providers: [ProductService],
+  providers: [ProductService, ProductRepository],
   exports: [ProductService, MongooseModule],
   controllers: [ProductController]
 })

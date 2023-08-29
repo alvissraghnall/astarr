@@ -1,14 +1,14 @@
 import { IsNotEmpty, IsAlpha, IsArray, IsNumber, IsBoolean, IsEmpty } from "class-validator";
 import { Expose } from "class-transformer";
 import { ProductSize } from "./product-size";
-import type { ObjectId } from "mongoose";
+import type { Types } from "mongoose";
 // import { DecorateAll } from "@/common/decorator/decorate-all.decorator";
 
 // @DecorateAll(Expose)
 export class ProductDTO {
 
     @Expose()
-    id?: ObjectId | string;
+    id?: Types.ObjectId | string;
 
     @IsNotEmpty()
     @Expose()
