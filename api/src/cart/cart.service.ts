@@ -88,27 +88,6 @@ export class CartService {
          
     }
 
-    // private async mapCartToDTO (cart: CartDocument, dto: CartDTO): Promise<CartDTO> {
-    //     dto.createdAt = cart?.createdAt;
-    //     dto.updatedAt = cart?.updatedAt;
-    //     dto.userId = cart?.userId.toString();
-    //     dto.products = cart?.products;
-    //     dto.id = cart?._id.toString();
-    //     dto.products = await this.includeProductRelation(cart.products)
-
-    //     console.log(dto);
-    //     return dto;
-    // }
-
-    // private async includeProductRelation (items: CartObjectDTO[]) {
-    //     let product: ProductDTO;
-    //     for (let item of items) {
-    //       product = await this.productService.getProduct(item.productId);
-    //       item.product = product;
-    //     }
-    //     return items;
-    // }
-
     async addItem (item: CartObjectRequestDTO, user: UserDocument) {
         const cart = await this.getCartForUser(user.id, true);
         // console.log(cart.products);

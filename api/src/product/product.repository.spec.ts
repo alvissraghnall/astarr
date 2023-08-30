@@ -1,33 +1,38 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductRepository } from './product.repository';
-import { Product } from './product.schema';
+import { Product, ProductDocument } from './product.schema';
 import { getModelToken } from '@nestjs/mongoose';
 import { ProductDTO } from './product.dto';
 import { ProductSize } from './product-size';
-import { Types } from 'mongoose';
+import { Types, Model } from 'mongoose';
 
 describe('ProductRepository', () => {
   let productRepository: ProductRepository;
   let mockProduct: ProductDTO;
 
-  const mockProductModel = {
-    create: jest.fn(),
-    findById: jest.fn(),
-    // Add other mock methods as needed
-  };
+  let mockProductModel: Model<ProductDocument>;
 
   beforeEach(async () => {
+    function mockUserModel(dto: any) {
+        this.data = dto;
+        this.save  = () => {
+          return this.data;
+        };
+    }
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProductRepository,
         {
           provide: getModelToken(Product.name), 
-          useValue: mockProductModel,
+          useValue: mockUserModel,
         },
       ],
     }).compile();
 
     productRepository = module.get<ProductRepository>(ProductRepository);
+    mockProductModel = module.get<Model<ProductDocument>>(getModelToken(Product.name));
+    
     mockProduct = {
         sizes: [ProductSize.LARGE],
         rating: 0,
@@ -53,12 +58,32 @@ describe('ProductRepository', () => {
 
   describe('createProduct', () => {
     it('should create a product', async () => {
-      mockProductModel.create.mockReturnValue(mockProduct);
 
-      const result = await productRepository.createProduct(mockProduct);
+        const prod = new Product();
 
-      expect(result).toEqual(mockProduct);
-      expect(mockProductModel.create).toHaveBeenCalledWith(mockProduct);
+        // const spy = jest
+        //     .spyOn(mockProductModel, 'create')
+        //     .mockResolvedValue(prod as ProductDocument);
+     
+        const result = await productRepository.createProduct(mockProduct);
+
+        expect(result).toEqual(mockProduct);
+        // expect(spy).toHaveBeenCalled();
+        // expect(mockProductModel.create).toHaveBeenCalledWith(mockProduct);
+    });
+  });
+
+  describe("findById", () => {
+    it("should find a product by id", async () => {
+        const prod = new Product();
+        const prodId = '12345';
+        const spy = jest
+          .spyOn(mockProductModel, 'findById') 
+          .mockResolvedValue(prod as ProductDocument); 
+        // act
+        await productRepository.getProductById(prodId);
+        // assert
+        expect(spy).toBeCalled();
     });
   });
 

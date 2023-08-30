@@ -2,7 +2,9 @@ import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsEmpty, IsNotEmpty, MinLength,  } from 'class-validator';
 import { Role } from './user-role';
 import { User } from './user.schema';
-import { DecorateAll } from '@/common/decorator/decorate-all.decorator';
+// import { DecorateAll } from '@/common/decorator/decorate-all.decorator';
+import { Document, Types } from 'mongoose';
+import { Product } from '@product/product.schema';
 
 // @DecorateAll(Expose)
 export class UserDTO {
@@ -25,6 +27,9 @@ export class UserDTO {
 
     @IsEmpty()
     role: Role;
+
+    @IsEmpty()
+    favourites: (Product | Types.ObjectId | string)[];
 
     @Expose()
     createdAt?: Date;

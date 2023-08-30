@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
 import { Role } from './user-role';
+import { Document, Types } from 'mongoose';
+import { Product } from '@product/product.schema';
 
 export type UserDocument = User & Document;
 
@@ -21,6 +22,9 @@ export class User {
 
     @Prop({ type: String, enum: Role, default: Role.USER })
     role: Role;
+
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }] })
+    favourites: (Product | Types.ObjectId | string)[]; // Array of favorite product IDs
 
     @Prop({ required: true, default: Date.now() })
     createdAt?: Date;

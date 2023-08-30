@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFavouriteDto } from './dto/create-favourite.dto';
-import { UpdateFavouriteDto } from './dto/update-favourite.dto';
+import { FavouriteRepository } from './favourite.repository';
+import { User } from '@user/user.schema';
 
 @Injectable()
 export class FavouriteService {
-  create(createFavouriteDto: CreateFavouriteDto) {
-    return 'This action adds a new favourite';
+  constructor(private readonly favouriteProductRepository: FavouriteRepository) {}
+
+  async addFavouriteProduct(userId: string, productId: string): Promise<User> {
+    return this.favouriteProductRepository.addFavouriteProduct(userId, productId);
   }
 
-  findAll() {
-    return `This action returns all favourite`;
+  async getUserFavouriteProducts(userId: string) {
+    return this.favouriteProductRepository.getUserFavouriteProducts(userId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favourite`;
-  }
-
-  update(id: number, updateFavouriteDto: UpdateFavouriteDto) {
-    return `This action updates a #${id} favourite`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} favourite`;
+  async removeFavouriteProduct(userId: string, productId: string): Promise<void> {
+    this.favouriteProductRepository.removeFavouriteProduct(userId, productId);
+    
   }
 }

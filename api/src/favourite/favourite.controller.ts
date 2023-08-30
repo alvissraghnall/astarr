@@ -1,34 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { FavouriteService } from './favourite.service';
-import { CreateFavouriteDto } from './dto/create-favourite.dto';
-import { UpdateFavouriteDto } from './dto/update-favourite.dto';
+import { CurrentUser } from '@auth/decorator/current-user.decorator';
+import { User, UserDocument } from '@user/user.schema';
 
-@Controller('favourite')
+@Controller('/favorites')
 export class FavouriteController {
   constructor(private readonly favouriteService: FavouriteService) {}
 
-  @Post()
-  create(@Body() createFavouriteDto: CreateFavouriteDto) {
-    return this.favouriteService.create(createFavouriteDto);
+  @Post('/:productId')
+  async addFavouriteProduct(@CurrentUser() user: UserDocument, @Param('productId') productId: string) {
+    const userId = user.id; 
+    return this.favouriteService.addFavouriteProduct(userId, productId);
   }
 
   @Get()
-  findAll() {
-    return this.favouriteService.findAll();
+  async getUserFavouriteProducts(@CurrentUser() user: UserDocument) {
+    const userId = user.id;
+    return this.favouriteService.getUserFavouriteProducts(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favouriteService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavouriteDto: UpdateFavouriteDto) {
-    return this.favouriteService.update(+id, updateFavouriteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favouriteService.remove(+id);
+  @Delete('/:productId')
+  async removeFavouriteProduct(@CurrentUser() user: UserDocument, @Param('productId') productId: string) {
+    const userId = user.id;
+    return this.favouriteService.removeFavouriteProduct(userId, productId);
   }
 }

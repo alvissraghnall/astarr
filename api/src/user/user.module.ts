@@ -29,10 +29,10 @@ import { MongooseError } from 'mongoose';
           const schema = UserSchema;
           schema.post('save', (error, doc, next) => {
             console.log(error, doc, next);
-            if (error.keyValue.email != null && error.name === "MongoServerError" && error.code === 11000) {
+            if (error.keyValue.email != null && error.name === "MongoError" && error.code === 11000) {
               console.log("Email must be unique");
               next(new BadRequestException('Email already exists, please try another'));
-            } else if (error.keyValue.username != null && error.name === "MongoServerError" && error.code === 11000) {
+            } else if (error.keyValue.username != null && error.name === "MongoError" && error.code === 11000) {
               console.log("Username must be unique");
               next(new BadRequestException('Username already in use, please try another'));
             } else {
